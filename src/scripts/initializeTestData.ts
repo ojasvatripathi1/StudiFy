@@ -94,6 +94,51 @@ export const sampleBadges: Badge[] = [
     },
     icon: 'star',
     color: 'yellow'
+  },
+  // New Study Session Badges
+  {
+    id: 'scholar-novice',
+    name: 'Scholar Novice',
+    description: 'Complete your first study session',
+    requirement: {
+      type: 'study_sessions',
+      value: 1
+    },
+    icon: 'book',
+    color: 'blue'
+  },
+  {
+    id: 'diligent-student',
+    name: 'Diligent Student',
+    description: 'Complete 10 study sessions',
+    requirement: {
+      type: 'study_sessions',
+      value: 10
+    },
+    icon: 'book-open',
+    color: 'indigo'
+  },
+  {
+    id: 'time-keeper',
+    name: 'Time Keeper',
+    description: 'Accumulate 60 minutes of study time',
+    requirement: {
+      type: 'study_minutes',
+      value: 60
+    },
+    icon: 'clock',
+    color: 'green'
+  },
+  {
+    id: 'marathon-runner',
+    name: 'Marathon Runner',
+    description: 'Accumulate 300 minutes of study time',
+    requirement: {
+      type: 'study_minutes',
+      value: 300
+    },
+    icon: 'timer',
+    color: 'orange'
   }
 ];
 

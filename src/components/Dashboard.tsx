@@ -139,43 +139,43 @@ export default function Dashboard() {
     }
   }, [user, userData, activeTab, toast]);
 
-  useEffect(() => {
-    if (user) {
-      const fetchData = async () => {
-        try {
-          const data = await getUserData(user.uid);
-          if (data) {
-            // Fetch rank, leaderboard, and transactions in parallel
-            const [rank, leaders, userTransactions] = await Promise.all([
-              getUserRank(user.uid, data.coins),
-              getLeaderboard(),
-              getTransactions(user.uid)
-            ]);
+  const fetchData = async () => {
+    if (!user) return;
+    try {
+      const data = await getUserData(user.uid);
+      if (data) {
+        // Fetch rank, leaderboard, and transactions in parallel
+        const [rank, leaders, userTransactions] = await Promise.all([
+          getUserRank(user.uid, data.coins),
+          getLeaderboard(),
+          getTransactions(user.uid)
+        ]);
 
-            setUserData({ ...data, rank });
-            setLeaderboard(leaders);
-            setTransactions(userTransactions);
-            // await checkLeaderboardChanges(); // Disabled: Requires server-side permissions
-          } else {
-            // If user is authenticated but no data exists, redirect to login to trigger creation
-            // or we could trigger creation here. For now, let's logout to be safe.
-            console.warn("User authenticated but no Firestore document found. Redirecting to login.");
-            router.push('/login');
-          }
-        } catch (error: unknown) {
-          console.error("Error fetching dashboard data:", error);
-          if (error instanceof Error && error.message.includes('permission-denied')) {
-            toast({
-              title: "Permission Denied",
-              description: "Please ensure Firestore Security Rules are set to 'allow read, write: if request.auth != null;'.",
-              variant: 'destructive',
-            });
-          }
-        }
-      };
-      fetchData();
+        setUserData({ ...data, rank });
+        setLeaderboard(leaders);
+        setTransactions(userTransactions);
+        // await checkLeaderboardChanges(); // Disabled: Requires server-side permissions
+      } else {
+        // If user is authenticated but no data exists, redirect to login to trigger creation
+        // or we could trigger creation here. For now, let's logout to be safe.
+        console.warn("User authenticated but no Firestore document found. Redirecting to login.");
+        router.push('/login');
+      }
+    } catch (error: unknown) {
+      console.error("Error fetching dashboard data:", error);
+      if (error instanceof Error && error.message.includes('permission-denied')) {
+        toast({
+          title: "Permission Denied",
+          description: "Please ensure Firestore Security Rules are set to 'allow read, write: if request.auth != null;'.",
+          variant: 'destructive',
+        });
+      }
     }
-  }, [user, router, toast]);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [user]);
 
   const canClaimBonus = () => {
     if (!userData?.lastBonusClaimed) return true;
@@ -504,7 +504,7 @@ export default function Dashboard() {
                 </h2>
               </div>
             </div>
-            <StudySessionTab onSessionActiveChange={setIsStudySessionActive} />
+            <StudySessionTab onSessionActiveChange={setIsStudySessionActive} onSessionComplete={fetchData} />
           </TabsContent>
 
           <TabsContent value="insights" className="mt-0 animate-in fade-in duration-700 space-y-12">

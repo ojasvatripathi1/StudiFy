@@ -69,9 +69,9 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
           <Table>
             <TableHeader>
               <TableRow className="border-white/5 hover:bg-transparent bg-white/5">
-                <TableHead className="w-24 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground h-16 px-8 text-center">RANK</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground h-16">PLAYER</TableHead>
-                <TableHead className="text-right text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground h-16 px-8">EARNINGS</TableHead>
+                <TableHead className="w-16 sm:w-24 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground h-16 px-2 sm:px-8 text-center">RANK</TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground h-16 px-2 sm:px-4">PLAYER</TableHead>
+                <TableHead className="text-right text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground h-16 px-2 sm:px-8">EARNINGS</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -97,7 +97,7 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                       })
                     }}
                   >
-                    <TableCell className="px-8">
+                    <TableCell className="px-2 sm:px-8">
                       <div className="flex items-center justify-center">
                         <div className={`flex items-center justify-center w-10 h-10 rounded-xl ${getRankBadge(index + 1)} transform group-hover/row:scale-110 transition-all duration-500 ${
                           isGolden ? 'ring-2 ring-yellow-400/50 shadow-[0_0_15px_rgba(255,215,0,0.3)]' :
@@ -107,8 +107,8 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-4 py-2">
+                    <TableCell className="px-2 sm:px-4">
+                      <div className="flex items-center gap-2 sm:gap-4 py-2">
                         <div className="relative">
                           {/* Profile Frame Effect */}
                           <div className={`absolute -inset-[3px] rounded-2xl blur-[6px] opacity-40 transition-all duration-500 group-hover/row:opacity-70 ${
@@ -116,7 +116,7 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                             isDiamond ? 'bg-cyan-400' : ''
                           }`}></div>
                           
-                          <div className={`relative h-14 w-14 rounded-2xl flex items-center justify-center ring-2 transition-all duration-500 overflow-hidden shadow-2xl ${
+                          <div className={`relative h-10 w-10 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center ring-2 transition-all duration-500 overflow-hidden shadow-2xl ${
                             isGolden ? 'ring-yellow-400 border-2 border-yellow-400/50 bg-yellow-400/20' :
                             isDiamond ? 'ring-cyan-400 border-2 border-cyan-400/50 bg-cyan-400/20' :
                             'ring-white/10 group-hover/row:ring-primary/40 bg-gradient-to-br from-primary/10 to-accent/10'
@@ -146,15 +146,15 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-card shadow-lg animate-pulse z-20" />
                           )}
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col min-w-0 max-w-[150px] sm:max-w-none">
                           <div className="flex items-center gap-2">
-                            <span className={`text-xl font-black tracking-tight uppercase transition-all duration-300 ${
+                            <span className={`text-sm sm:text-xl font-black tracking-tight uppercase transition-all duration-300 break-words leading-tight ${
                               user.uid === currentUserId ? 'text-primary' : 
                               isGolden ? 'text-yellow-600 dark:text-yellow-400 drop-shadow-[0_0_8px_rgba(255,215,0,0.3)]' :
                               isDiamond ? 'text-cyan-600 dark:text-cyan-400 drop-shadow-[0_0_8px_rgba(0,255,255,0.3)]' :
                               'text-foreground/90'
                             }`}>
-                              {user.username ? `@${user.username}` : user.displayName}
+                              {user.displayName || user.username || 'Anonymous'}
                             </span>
                             {(isGolden || isDiamond) && (
                               <Badge className={`px-1.5 py-0 text-[8px] font-black tracking-tighter uppercase ${
@@ -180,12 +180,12 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-right px-8">
+                    <TableCell className="text-right px-2 sm:px-8">
                       <div className="flex items-center justify-end gap-3">
                         <div className="flex flex-col items-end">
                           <div className="flex items-center gap-2">
                             <Coins className="h-4 w-4 text-primary group-hover/row:rotate-12 transition-transform duration-500" />
-                            <span className="text-xl font-black text-foreground tracking-tighter">{user.coins.toLocaleString()}</span>
+                            <span className="text-sm sm:text-xl font-black text-foreground tracking-tighter">{user.coins.toLocaleString()}</span>
                           </div>
                           <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">COINS</span>
                         </div>

@@ -25,6 +25,7 @@ export interface StudySession {
     count: number;
     totalBreakTime: number; // in seconds
   };
+  coinsEarned?: number;
   tags?: string[];
   createdAt: Timestamp;
   updatedAt: Timestamp;

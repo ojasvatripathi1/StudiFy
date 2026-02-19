@@ -20,6 +20,8 @@ export interface UserData {
   totalQuizzesTaken: number;
   rank?: number; // User's rank on the leaderboard
   perfectMonths: number;
+  totalStudyMinutes?: number;
+  totalStudySessions?: number;
   emailVerified?: boolean;
   activeCustomizations?: {
     theme?: string;
@@ -36,7 +38,7 @@ export interface Transaction {
   description: string;
   timestamp: Timestamp;
   type: 'credit' | 'debit';
-  category?: 'bonus' | 'quiz' | 'penalty' | 'badge' | 'welcome';
+  category?: 'bonus' | 'quiz' | 'penalty' | 'badge' | 'welcome' | 'study_session';
 }
 
 export interface Badge {
@@ -45,8 +47,8 @@ export interface Badge {
   description: string;
   price?: number; // For purchasable badges
   requirement?: {
-    type: 'streak' | 'perfect' | 'coins';
-    category?: 'login' | 'math' | 'aptitude' | 'grammar' | 'programming' | 'daily' | 'weekly' | 'monthly';
+    type: 'streak' | 'perfect' | 'coins' | 'study_minutes' | 'study_sessions';
+    category?: 'login' | 'math' | 'aptitude' | 'grammar' | 'programming' | 'daily' | 'weekly' | 'monthly' | 'total';
     value: number;
   };
   icon: string;

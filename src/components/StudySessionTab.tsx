@@ -61,7 +61,13 @@ interface ActiveSession {
   isRunning: boolean;
 }
 
-export default function StudySessionTab({ onSessionActiveChange }: { onSessionActiveChange?: (isActive: boolean) => void }) {
+export default function StudySessionTab({ 
+  onSessionActiveChange,
+  onSessionComplete 
+}: { 
+  onSessionActiveChange?: (isActive: boolean) => void;
+  onSessionComplete?: () => void;
+}) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [sessions, setSessions] = useState<StudySession[]>([]);
@@ -111,7 +117,7 @@ export default function StudySessionTab({ onSessionActiveChange }: { onSessionAc
     }
   }, [user, loadSessions]);
   useEffect(() => {
-    if (!activeSession?.isRunning || isBreakActive) return;
+    if (!activeSession?.isRunning || isBreakActive || loading) return;
 
     const interval = setInterval(() => {
       setActiveSession((prev) => {
@@ -124,7 +130,7 @@ export default function StudySessionTab({ onSessionActiveChange }: { onSessionAc
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [activeSession?.isRunning, isBreakActive]);
+  }, [activeSession?.isRunning, isBreakActive, loading]);
 
   // Break timer effect
   useEffect(() => {
@@ -252,6 +258,16 @@ export default function StudySessionTab({ onSessionActiveChange }: { onSessionAc
         achievements.split(',').map((a) => a.trim()).filter(Boolean)
       );
 
+      const durationInMinutes = Math.floor(activeSession.elapsedTime / 60);
+      const coinsEarned = Math.floor(durationInMinutes / 5) * 10;
+      
+      toast({
+        title: "Session Completed!",
+        description: `You earned ${coinsEarned} coins for studying ${durationInMinutes} minutes.`,
+      });
+      
+      onSessionComplete?.();
+
       setActiveSession(null);
       setIsBreakActive(false);
       setBreakTimeRemaining(0);
@@ -266,10 +282,29 @@ export default function StudySessionTab({ onSessionActiveChange }: { onSessionAc
       await loadSessions();
     } catch (error) {
       console.error('Error completing session:', error);
+      toast({
+        title: "Error Saving Session",
+        description: "There was a problem saving your session. Please try again.",
+        variant: "destructive",
+      });
+      // Pause session to prevent infinite auto-save loop on error
+      setActiveSession(prev => prev ? { ...prev, isRunning: false } : null);
     } finally {
       setLoading(false);
     }
   };
+
+  // Auto-complete session when time is up
+  useEffect(() => {
+    if (
+      activeSession?.isRunning && 
+      activeSession.session.plannedDuration && 
+      activeSession.elapsedTime >= activeSession.session.plannedDuration &&
+      !loading
+    ) {
+      handleCompleteSession();
+    }
+  }, [activeSession, loading]);
 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);

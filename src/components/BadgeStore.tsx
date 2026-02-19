@@ -39,16 +39,17 @@ export function BadgeStore() {
           getUserData(user.uid)
         ]);
         
-        // If no badges in Firestore, initialize with sample badges
-        if (badgeData.length === 0) {
-          console.log('Initializing badges in Firestore...');
+        // Check for missing badges and add them
+        const missingBadges = sampleBadges.filter(sb => !badgeData.some(b => b.id === sb.id));
+        
+        if (missingBadges.length > 0) {
+          console.log('Adding missing badges to Firestore...', missingBadges);
           const batch = writeBatch(db);
           
-          // Add sample badges to Firestore
-          sampleBadges.forEach(badge => {
+          missingBadges.forEach(badge => {
             const badgeRef = doc(collection(db, 'badges'), badge.id);
             batch.set(badgeRef, {
-              id: badge.id, // Ensure ID is included in the document data
+              id: badge.id,
               name: badge.name,
               description: badge.description,
               price: badge.price || null,
@@ -60,13 +61,13 @@ export function BadgeStore() {
           });
           
           await batch.commit();
-          console.log('Sample badges initialized in Firestore');
+          console.log('Missing badges initialized in Firestore');
           
-          // Refresh badges after initialization
+          // Refresh badges after update
           const updatedBadgeData = await getBadges();
           setBadges(updatedBadgeData.length > 0 ? updatedBadgeData : sampleBadges);
         } else {
-          setBadges(badgeData);
+          setBadges(badgeData.length > 0 ? badgeData : sampleBadges);
         }
         
         setUserData(userDataResult);

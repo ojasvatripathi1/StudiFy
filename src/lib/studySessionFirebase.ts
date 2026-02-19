@@ -11,8 +11,9 @@ import {
   serverTimestamp,
   Timestamp,
   updateDoc,
+  runTransaction,
 } from "firebase/firestore";
-import { db } from './firebase';
+import { db, checkAndAwardBadges } from './firebase';
 import { StudySession, SessionInsight, SubjectType, SessionStatus } from './studySessionTypes';
 
 interface SubjectStats {
@@ -105,22 +106,91 @@ export const completeStudySession = async (
 ): Promise<void> => {
   try {
     const sessionRef = doc(db, `users/${userId}/studySessions`, sessionId);
-    const duration = Math.floor(
-      (endTime.toMillis() - (await getDoc(sessionRef)).data()?.startTime?.toMillis()) / 1000
-    );
+    const userRef = doc(db, 'users', userId);
 
-    await updateDoc(sessionRef, {
-      status: 'completed',
-      endTime,
-      duration,
-      notes,
-      focusLevel,
-      productivity,
-      distractions: distractions || [],
-      topics: topics || [],
-      achievements: achievements || [],
-      updatedAt: serverTimestamp(),
+    let finalTotalMinutes = 0;
+    let finalTotalSessions = 0;
+
+    await runTransaction(db, async (transaction) => {
+      const sessionSnap = await transaction.get(sessionRef);
+      if (!sessionSnap.exists()) {
+        throw new Error("Session does not exist!");
+      }
+
+      const sessionData = sessionSnap.data();
+      const startTime = sessionData.startTime as Timestamp;
+      const durationInSeconds = Math.floor((endTime.toMillis() - startTime.toMillis()) / 1000);
+      const durationInMinutes = Math.floor(durationInSeconds / 60);
+      
+      // Calculate coins: 10 coins for every 5 minutes
+      const coinsEarned = Math.floor(durationInMinutes / 5) * 10;
+
+      // READ: Get user data (Must be done before any writes)
+      const userSnap = await transaction.get(userRef);
+      let currentCoins = 0;
+      let currentStudyMinutes = 0;
+      let currentStudySessions = 0;
+      let userExists = false;
+
+      if (userSnap.exists()) {
+        userExists = true;
+        const userData = userSnap.data();
+        currentCoins = userData.coins || 0;
+        currentStudyMinutes = userData.totalStudyMinutes || 0;
+        currentStudySessions = userData.totalStudySessions || 0;
+      }
+
+      finalTotalMinutes = currentStudyMinutes + durationInMinutes;
+      finalTotalSessions = currentStudySessions + 1;
+
+      // WRITE: Update session
+      transaction.update(sessionRef, {
+        status: 'completed',
+        endTime,
+        duration: durationInSeconds,
+        coinsEarned,
+        notes,
+        focusLevel,
+        productivity,
+        distractions: distractions || [],
+        topics: topics || [],
+        achievements: achievements || [],
+        updatedAt: serverTimestamp(),
+      });
+
+      // WRITE: Update user stats and balance
+      if (userExists) {
+        transaction.update(userRef, {
+          coins: currentCoins + coinsEarned,
+          totalStudyMinutes: finalTotalMinutes,
+          totalStudySessions: finalTotalSessions
+        });
+
+        // Add transaction record if coins earned
+        if (coinsEarned > 0) {
+          const newTransactionRef = doc(collection(db, `users/${userId}/transactions`));
+          transaction.set(newTransactionRef, {
+            userId,
+            amount: coinsEarned,
+            type: 'credit',
+            category: 'study_session',
+            description: `Completed ${durationInMinutes} min study session`,
+            timestamp: serverTimestamp(),
+            balanceAfter: currentCoins + coinsEarned
+          });
+        }
+      }
     });
+
+    // Check for badges after successful transaction
+    // We check for both cumulative minutes and session count
+    if (finalTotalMinutes > 0) {
+      await checkAndAwardBadges(userId, 'study_minutes', finalTotalMinutes);
+    }
+    if (finalTotalSessions > 0) {
+      await checkAndAwardBadges(userId, 'study_sessions', finalTotalSessions);
+    }
+
   } catch (error) {
     console.error('Error completing study session:', error);
     throw error;

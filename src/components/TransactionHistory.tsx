@@ -60,15 +60,15 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
       {/* Premium Glow Effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       
-      <div className="relative h-full bg-card/60 backdrop-blur-3xl rounded-[2.9rem] p-6 md:p-8 flex flex-col gap-6 border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] overflow-hidden">
+      <div className="relative h-full bg-card/60 backdrop-blur-3xl rounded-[2.9rem] p-4 sm:p-6 md:p-8 flex flex-col gap-6 border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] overflow-hidden">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-3.5 bg-accent/10 rounded-[1rem] border border-accent/20 shadow-xl ring-1 ring-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-              <History className="h-6 w-6 text-accent" />
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="p-2.5 sm:p-3.5 bg-accent/10 rounded-[1rem] border border-accent/20 shadow-xl ring-1 ring-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
+              <History className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
             </div>
             <div>
-              <p className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-1">Financial Flow</p>
-              <h3 className="text-2xl font-black uppercase tracking-tight text-foreground">Activity <span className="text-accent">Log</span></h3>
+              <p className="text-[8px] sm:text-[9px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-1">Financial Flow</p>
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-foreground">Activity <span className="text-accent">Log</span></h3>
             </div>
           </div>
           <div className="hidden sm:flex items-center gap-2.5 py-1.5 px-4 rounded-full bg-accent/10 border border-accent/20 shadow-lg ring-1 ring-accent/20">
@@ -78,16 +78,16 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
         </div>
 
         {/* Summary Stats Grid */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {[
             { label: 'Credits', val: totalCredits, icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
             { label: 'Debits', val: totalDebits, icon: TrendingDown, color: 'text-rose-400', bg: 'bg-rose-500/10' },
             { label: 'Net Yield', val: totalCredits - totalDebits, icon: Coins, color: 'text-primary', bg: 'bg-primary/10' }
           ].map((stat, i) => (
-            <div key={i} className={`p-3 rounded-[1rem] bg-white/5 border border-white/10 flex flex-col items-center justify-center gap-1.5 group/stat hover:bg-white/10 transition-all duration-500`}>
-              <stat.icon className={`h-3.5 w-3.5 ${stat.color} mb-0.5`} />
-              <p className="text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">{stat.label}</p>
-              <p className={`text-xs font-black tracking-tight ${stat.color}`}>
+            <div key={i} className={`p-2 sm:p-3 rounded-[1rem] bg-white/5 border border-white/10 flex flex-col items-center justify-center gap-1 sm:gap-1.5 group/stat hover:bg-white/10 transition-all duration-500`}>
+              <stat.icon className={`h-3 w-3 sm:h-3.5 sm:w-3.5 ${stat.color} mb-0.5`} />
+              <p className="text-[7px] sm:text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] text-center">{stat.label}</p>
+              <p className={`text-[10px] sm:text-xs font-black tracking-tight ${stat.color}`}>
                 {stat.val > 0 ? '+' : ''}{stat.val.toLocaleString()}
               </p>
             </div>
@@ -96,35 +96,35 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
         
         <div className="flex-1 min-h-0 -mx-4">
           <ScrollArea className="h-full px-4">
-            <div className="space-y-4 pb-4">
+            <div className="space-y-3 sm:space-y-4 pb-4">
               {transactions.length > 0 ? (
                 transactions.map((tx) => (
                   <div 
                     key={tx.id} 
-                    className="group/item relative overflow-hidden rounded-[1.5rem] border border-white/5 bg-white/5 p-5 transition-all duration-500 hover:bg-white/10 hover:border-white/10 shadow-lg"
+                    className="group/item relative overflow-hidden rounded-[1.5rem] border border-white/5 bg-white/5 p-4 sm:p-5 transition-all duration-500 hover:bg-white/10 hover:border-white/10 shadow-lg"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className={`p-3 rounded-[1rem] transition-all duration-500 group-hover/item:scale-110 group-hover/item:rotate-3 ${
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className={`p-2.5 sm:p-3 rounded-[1rem] transition-all duration-500 group-hover/item:scale-110 group-hover/item:rotate-3 shrink-0 ${
                         tx.type === 'credit' 
                           ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)]' 
                           : 'bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.1)]'
                       }`}>
                         {tx.type === 'credit' ? (
-                          <ArrowUpCircle className="h-5 w-5" />
+                          <ArrowUpCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                         ) : (
-                          <ArrowDownCircle className="h-5 w-5" />
+                          <ArrowDownCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-black uppercase tracking-[0.1em] text-foreground/90 truncate transition-colors leading-tight">
+                        <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.1em] text-foreground/90 break-words leading-tight transition-colors">
                           {tx.description}
                         </p>
-                        <p className="text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] flex items-center gap-2 mt-1">
-                          <History className="h-2.5 w-2.5" />
+                        <p className="text-[7px] sm:text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] flex items-center gap-1.5 sm:gap-2 mt-1">
+                          <History className="h-2 w-2 sm:h-2.5 sm:w-2.5" />
                           {formatDistanceToNow(tx.timestamp.toDate(), { addSuffix: true })}
                         </p>
                       </div>
-                      <div className={`text-lg font-black tracking-tighter shrink-0 ml-2 ${
+                      <div className={`text-sm sm:text-lg font-black tracking-tighter shrink-0 ml-2 ${
                         tx.type === 'credit' 
                           ? 'text-emerald-400' 
                           : 'text-rose-400'

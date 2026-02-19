@@ -5,7 +5,7 @@ export interface Transaction {
   userId: string;
   amount: number;
   type: 'credit' | 'debit';
-  category: 'quiz' | 'penalty' | 'login' | 'purchase' | 'other';
+  category: 'quiz' | 'penalty' | 'login' | 'purchase' | 'study_session' | 'other';
   description: string;
   timestamp: Date | Timestamp;
   balanceAfter?: number;

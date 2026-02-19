@@ -695,7 +695,7 @@ export default function StudyAssistantChatbot({ userData }: StudyAssistantChatbo
 
               <form
                 onSubmit={handleSendMessage}
-                className="flex items-center gap-4"
+                className="flex items-center gap-2 sm:gap-4"
               >
                 <input
                   type="file"
@@ -711,15 +711,15 @@ export default function StudyAssistantChatbot({ userData }: StudyAssistantChatbo
                     fileInputRef.current?.click();
                   }}
                   disabled={isUploading || !ollamaAvailable}
-                  className="h-14 w-14 rounded-[1.2rem] bg-primary text-white hover:bg-primary/90 shrink-0 transition-all duration-500 shadow-2xl hover:scale-105 active:scale-95"
+                  className="h-10 w-10 sm:h-14 sm:w-14 rounded-[0.8rem] sm:rounded-[1.2rem] bg-primary text-white hover:bg-primary/90 shrink-0 transition-all duration-500 shadow-2xl hover:scale-105 active:scale-95"
                 >
                   {isUploading ? (
-                    <Loader className="h-5 w-5 animate-spin" />
+                    <Loader className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                   ) : (
-                    <Upload className="h-5 w-5" />
+                    <Upload className="h-4 w-4 sm:h-5 sm:w-5" />
                   )}
                 </Button>
-                <div className="flex-1 relative group/input">
+                <div className="flex-1 relative group/input min-w-0">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover/input:opacity-100 blur-xl transition-opacity duration-700" />
                   <textarea
                     value={inputValue}
@@ -730,21 +730,21 @@ export default function StudyAssistantChatbot({ userData }: StudyAssistantChatbo
                         handleSendMessage(e);
                       }
                     }}
-                    placeholder={studyMaterial ? "Ask anything... (Ctrl+Enter to send)" : "Upload material to start..."}
-                    className="relative w-full h-14 bg-card/40 border border-white/10 rounded-[1.2rem] px-6 py-4 text-base font-medium placeholder:text-muted-foreground/30 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 resize-none overflow-hidden"
+                    placeholder={studyMaterial ? "Ask anything..." : "Upload material..."}
+                    className="relative w-full h-10 sm:h-14 bg-card/40 border border-white/10 rounded-[0.8rem] sm:rounded-[1.2rem] px-3 sm:px-6 py-2 sm:py-4 text-xs sm:text-base font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 resize-none overflow-hidden"
                   />
                 </div>
                 <Button
                   type="submit"
                   disabled={isLoading || !inputValue.trim() || !ollamaAvailable}
-                  className="h-14 px-8 rounded-[1.2rem] bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] hover:bg-right text-white font-black uppercase tracking-[0.25em] text-[10px] transition-all duration-700 shadow-2xl hover:scale-105 active:scale-95"
+                  className="h-10 sm:h-14 px-4 sm:px-8 rounded-[0.8rem] sm:rounded-[1.2rem] bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] hover:bg-right text-white font-black uppercase tracking-[0.25em] text-[8px] sm:text-[10px] transition-all duration-700 shadow-2xl hover:scale-105 active:scale-95 shrink-0"
                 >
                   {isLoading ? (
-                    <Loader className="h-4 w-4 animate-spin" />
+                    <Loader className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                   ) : (
                     <>
-                      <Send className="mr-2 h-4 w-4" />
-                      SEND
+                      <Send className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">SEND</span>
                     </>
                   )}
                 </Button>

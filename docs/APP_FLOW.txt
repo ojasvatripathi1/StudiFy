@@ -1,0 +1,34 @@
+# 🔄 StudiFy Application Flow
+
+## 1. User Onboarding Flow
+1.  Landing Page: Introduction to features and value proposition.
+2.  Auth Gate: User signs up or logs in.
+3.  Dashboard Initialization: Firebase fetches user stats (coins, streak, rank) and today's quiz status.
+
+## 2. The Daily Learning Loop
+1.  Check-in: User views the "Daily Bonus" card.
+2.  The Challenge: User clicks "Play Puzzle to Claim."
+3.  Game Selection: App determines the game type based on the day of the week (Memory/Math/Word).
+4.  Reward: Upon winning, a Firebase Batch Operation:
+    - Increments `coins`.
+    - Updates `lastLoginDate`.
+    - Calculates and updates `streak`.
+    - Logs a `transaction` in the Activity Log.
+
+## 3. AI Study Assistant Flow
+1.  Upload: User uploads study material (e.g., "Operating Systems.pdf").
+2.  Processing: Text is extracted and sent to the AI context.
+3.  Interaction: User asks, "Explain Virtual Memory from my notes."
+4.  Response: AI provides a summary grounded in the uploaded document.
+
+## 4. Assessment Flow
+1.  Start Quiz: User selects a category (e.g., Programming).
+2.  Fetch: App calls `/api/daily-quiz` or retrieves today's cached quiz from Firestore.
+3.  Execution: User answers 5-10 questions.
+4.  Completion: Results are saved, and coins are awarded based on the score.
+
+## 5. Study Session Flow
+1.  Setup: User selects a subject and sets a goal.
+2.  Focus: Timer starts; user studies.
+3.  Review: Upon stopping, user inputs productivity metrics.
+4.  Analytics: Session data is aggregated into the "Growth Story" charts.
