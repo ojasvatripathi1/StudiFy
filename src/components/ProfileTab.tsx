@@ -140,13 +140,6 @@ export default function ProfileTab({ user, onUpdate }: ProfileTabProps) {
           : "Your identity has been successfully synchronized.",
       });
 
-      // 3. Background sync to ensure we have any server-side generated fields
-      getUserData(user.uid).then((refreshed) => {
-        if (refreshed) {
-          onUpdate(refreshed);
-        }
-      });
-
     } catch (e: unknown) {
       console.error("Failed to update profile:", e);
       // Rollback on error

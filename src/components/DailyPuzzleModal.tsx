@@ -7,7 +7,11 @@ import { Brain, Sparkles, RefreshCw, CheckCircle2, Calculator, Type } from "luci
 import { motion, AnimatePresence } from "framer-motion";
 
 const MEMORY_ICONS = ["💻", "🚀", "🧠", "📚", "⚡", "🎓", "🔍", "🏆"];
-const WORD_LIST = ["STUDY", "BRAIN", "LOGIC", "LEARN", "SMART", "QUEST", "SKILL", "WRITE"];
+const WORD_LIST = [
+  "ALGORITHM", "DEBUG", "COMPILE", "PYTHON", "REACT", "DATABASE", 
+  "SYSTEM", "MEMORY", "SERVER", "CLIENT", "DESIGN", "CODING", 
+  "FUTURE", "GLOBAL", "INNOVATE", "MODULE", "OBJECT", "SYNTAX"
+];
 
 interface Card {
   id: number;
@@ -64,13 +68,24 @@ export function DailyPuzzleModal({ isOpen, onClose, onComplete }: DailyPuzzleMod
       })));
       setFlippedCards([]);
     } else if (puzzleType === 'math') {
-      const a = Math.floor(Math.random() * 20) + 10;
-      const b = Math.floor(Math.random() * 20) + 5;
-      const op = Math.random() > 0.5 ? '+' : '-';
-      setMathProblem({
-        q: `${a} ${op} ${b}`,
-        a: op === '+' ? a + b : a - b
-      });
+      // 30% chance of multiplication for variety
+      if (Math.random() > 0.7) {
+        const a = Math.floor(Math.random() * 11) + 2; // 2-12
+        const b = Math.floor(Math.random() * 11) + 2; // 2-12
+        setMathProblem({
+          q: `${a} × ${b}`,
+          a: a * b
+        });
+      } else {
+        // Harder addition/subtraction
+        const a = Math.floor(Math.random() * 80) + 20; // 20-99
+        const b = Math.floor(Math.random() * 40) + 10; // 10-49
+        const op = Math.random() > 0.5 ? '+' : '-';
+        setMathProblem({
+          q: `${a} ${op} ${b}`,
+          a: op === '+' ? a + b : a - b
+        });
+      }
     } else if (puzzleType === 'word') {
       const original = WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
       const scrambled = original.split('').sort(() => Math.random() - 0.5).join('');

@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     // Build a more robust prompt for Groq/Ollama
     const prompt = `Generate exactly 5 technical multiple-choice questions for computer science students.
 Topic: ${topic}
-Difficulty: ${difficulty}
+Difficulty: ${difficulty} (Ensure questions are not trivial. They should be challenging but fair for a CS student)
 
 IMPORTANT: You MUST vary the correct answer position (a, b, c, or d). Do NOT make all answers the same letter.
 
