@@ -59,6 +59,9 @@ interface ActiveSession {
   session: StudySession;
   elapsedTime: number;
   isRunning: boolean;
+  sessionStartTime: number; // Timestamp in milliseconds when session started
+  pausedTime: number; // Total time paused (in seconds)
+  pauseStartTime: number | null; // When the pause started
 }
 
 export default function StudySessionTab({ 
@@ -84,6 +87,8 @@ export default function StudySessionTab({
   // Break timer states
   const [isBreakActive, setIsBreakActive] = useState(false);
   const [breakTimeRemaining, setBreakTimeRemaining] = useState(0);
+  const [breakStartTime, setBreakStartTime] = useState<number | null>(null);
+  const [breakDuration, setBreakDuration] = useState(0);
 
   // Form states for creating new session
   const [newSessionData, setNewSessionData] = useState({
@@ -119,34 +124,72 @@ export default function StudySessionTab({
   useEffect(() => {
     if (!activeSession?.isRunning || isBreakActive || loading) return;
 
-    const interval = setInterval(() => {
+    const updateTimer = () => {
       setActiveSession((prev) => {
-        if (!prev) return null;
+        if (!prev || !prev.isRunning) return prev;
+        
+        // Calculate actual elapsed time based on real timestamps
+        const currentTime = Date.now();
+        const actualElapsedSeconds = Math.floor((currentTime - prev.sessionStartTime) / 1000) - prev.pausedTime;
+        
         return {
           ...prev,
-          elapsedTime: prev.elapsedTime + 1,
+          elapsedTime: Math.max(0, actualElapsedSeconds),
         };
       });
-    }, 1000);
+    };
+
+    // Update timer more frequently to ensure accuracy
+    const interval = setInterval(updateTimer, 500);
 
     return () => clearInterval(interval);
   }, [activeSession?.isRunning, isBreakActive, loading]);
 
   // Break timer effect
   useEffect(() => {
-    if (!isBreakActive || breakTimeRemaining <= 0) {
+    if (!isBreakActive || !breakStartTime || breakDuration <= 0) {
       if (isBreakActive && breakTimeRemaining <= 0) {
         setIsBreakActive(false);
+        setBreakStartTime(null);
       }
       return;
     }
 
-    const interval = setInterval(() => {
-      setBreakTimeRemaining((prev) => prev - 1);
-    }, 1000);
+    const updateBreakTimer = () => {
+      const elapsedSeconds = Math.floor((Date.now() - breakStartTime) / 1000);
+      const remaining = Math.max(0, breakDuration - elapsedSeconds);
+      
+      setBreakTimeRemaining(remaining);
+      
+      if (remaining <= 0) {
+        setIsBreakActive(false);
+        setBreakStartTime(null);
+      }
+    };
+
+    const interval = setInterval(updateBreakTimer, 500);
 
     return () => clearInterval(interval);
-  }, [isBreakActive, breakTimeRemaining]);
+  }, [isBreakActive, breakStartTime, breakDuration]);
+
+  // Handle tab visibility changes to ensure timer continues running
+  useEffect(() => {
+    if (!activeSession) return;
+
+    const handleVisibilityChange = () => {
+      // When tab regains focus, force an update of the timer
+      if (!document.hidden && activeSession?.isRunning) {
+        setActiveSession((prev) => {
+          if (!prev) return null;
+          // Force recalculation of elapsed time
+          return { ...prev };
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [activeSession]);
 
   // Prevent navigation when session is active
   useEffect(() => {
@@ -187,6 +230,9 @@ export default function StudySessionTab({
           session,
           elapsedTime: 0,
           isRunning: true,
+          sessionStartTime: Date.now(),
+          pausedTime: 0,
+          pauseStartTime: null,
         });
         setShowFocusWarning(true);
 
@@ -213,6 +259,7 @@ export default function StudySessionTab({
       return {
         ...prev,
         isRunning: false,
+        pauseStartTime: Date.now(),
       };
     });
   };
@@ -221,9 +268,17 @@ export default function StudySessionTab({
     if (!activeSession) return;
     setActiveSession((prev) => {
       if (!prev) return null;
+      
+      // Calculate paused duration and add to total pausedTime
+      const pausedDuration = prev.pauseStartTime 
+        ? Math.floor((Date.now() - prev.pauseStartTime) / 1000)
+        : 0;
+      
       return {
         ...prev,
         isRunning: true,
+        pausedTime: prev.pausedTime + pausedDuration,
+        pauseStartTime: null,
       };
     });
   };
@@ -232,10 +287,12 @@ export default function StudySessionTab({
     if (!activeSession || !user?.uid) return;
 
     try {
-      const breakDuration = 5 * 60; // 5 minutes in seconds
+      const breakDurationInSeconds = 5 * 60; // 5 minutes in seconds
       setIsBreakActive(true);
-      setBreakTimeRemaining(breakDuration);
-      await recordSessionBreak(user.uid, activeSession.session.id, breakDuration);
+      setBreakStartTime(Date.now());
+      setBreakDuration(breakDurationInSeconds);
+      setBreakTimeRemaining(breakDurationInSeconds);
+      await recordSessionBreak(user.uid, activeSession.session.id, breakDurationInSeconds);
     } catch (error) {
       console.error('Error recording break:', error);
     }
@@ -271,6 +328,8 @@ export default function StudySessionTab({
       setActiveSession(null);
       setIsBreakActive(false);
       setBreakTimeRemaining(0);
+      setBreakStartTime(null);
+      setBreakDuration(0);
       setSessionNotes('');
       setFocusLevel(5);
       setProductivity(5);

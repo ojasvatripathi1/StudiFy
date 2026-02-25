@@ -953,6 +953,965 @@ export const mockQuizQuestions: Record<string, QuizQuestion[]> = {
       difficulty: 'easy',
       points: 5
     }
+  ],
+  physics: [
+    {
+      id: 'phys-1',
+      category: 'physics',
+      question: 'What is the SI unit of force?',
+      options: ['Watt', 'Joule', 'Newton', 'Pascal'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-2',
+      category: 'physics',
+      question: 'Which law states that for every action, there is an equal and opposite reaction?',
+      options: ['Newton\'s First Law', 'Newton\'s Second Law', 'Newton\'s Third Law', 'Law of Conservation of Momentum'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-3',
+      category: 'physics',
+      question: 'What is the speed of light in vacuum?',
+      options: ['3 x 10^8 m/s', '3 x 10^6 m/s', '3 x 10^5 km/h', '3000 m/s'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'phys-4',
+      category: 'physics',
+      question: 'What is the unit of electrical resistance?',
+      options: ['Ampere', 'Volt', 'Ohm', 'Watt'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-5',
+      category: 'physics',
+      question: 'Who proposed the theory of relativity?',
+      options: ['Isaac Newton', 'Albert Einstein', 'Galileo Galilei', 'Nikola Tesla'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'phys-6',
+      category: 'physics',
+      question: 'What is the phenomenon of bending of light when it passes from one medium to another?',
+      options: ['Reflection', 'Refraction', 'Diffraction', 'Dispersion'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'phys-7',
+      category: 'physics',
+      question: 'Which particle has a negative charge?',
+      options: ['Proton', 'Neutron', 'Electron', 'Photon'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-8',
+      category: 'physics',
+      question: 'What is the energy possessed by a body due to its motion?',
+      options: ['Potential Energy', 'Kinetic Energy', 'Thermal Energy', 'Chemical Energy'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-9',
+      category: 'physics',
+      question: 'What is the value of acceleration due to gravity on Earth?',
+      options: ['9.8 m/s^2', '10.5 m/s^2', '8.9 m/s^2', '9.2 m/s^2'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-10',
+      category: 'physics',
+      question: 'Which instrument is used to measure atmospheric pressure?',
+      options: ['Thermometer', 'Barometer', 'Hygrometer', 'Anemometer'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'phys-11',
+      category: 'physics',
+      question: 'What is the frequency of AC mains in India?',
+      options: ['50 Hz', '60 Hz', '100 Hz', '220 Hz'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'phys-12',
+      category: 'physics',
+      question: 'Which color has the longest wavelength in the visible spectrum?',
+      options: ['Violet', 'Blue', 'Green', 'Red'],
+      correctAnswer: 3,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'phys-13',
+      category: 'physics',
+      question: 'What is the escape velocity from Earth?',
+      options: ['11.2 km/s', '9.8 km/s', '7.9 km/s', '15 km/s'],
+      correctAnswer: 0,
+      difficulty: 'hard',
+      points: 15
+    },
+    {
+      id: 'phys-14',
+      category: 'physics',
+      question: 'Which physical quantity is measured in Candelas?',
+      options: ['Luminous Intensity', 'Magnetic Flux', 'Electric Current', 'Force'],
+      correctAnswer: 0,
+      difficulty: 'hard',
+      points: 10
+    },
+    {
+      id: 'phys-15',
+      category: 'physics',
+      question: 'What is the working principle of an optical fiber?',
+      options: ['Refraction', 'Scattering', 'Total Internal Reflection', 'Interference'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 10
+    }
+  ],
+  chemistry: [
+    {
+      id: 'chem-1',
+      category: 'chemistry',
+      question: 'What is the chemical symbol for Gold?',
+      options: ['Ag', 'Au', 'Fe', 'Cu'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-2',
+      category: 'chemistry',
+      question: 'Which gas is most abundant in the Earth\'s atmosphere?',
+      options: ['Oxygen', 'Carbon Dioxide', 'Nitrogen', 'Argon'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'chem-3',
+      category: 'chemistry',
+      question: 'What is the pH of pure water?',
+      options: ['5', '6', '7', '8'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-4',
+      category: 'chemistry',
+      question: 'What is the chemical formula for table salt?',
+      options: ['NaCl', 'KCl', 'NaOH', 'HCl'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-5',
+      category: 'chemistry',
+      question: 'Which element is known as the "King of Chemicals"?',
+      options: ['Hydrochloric Acid', 'Sulfuric Acid', 'Nitric Acid', 'Acetic Acid'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'chem-6',
+      category: 'chemistry',
+      question: 'What is the atomic number of Carbon?',
+      options: ['6', '8', '12', '14'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-7',
+      category: 'chemistry',
+      question: 'Which bond involves the sharing of electron pairs between atoms?',
+      options: ['Ionic Bond', 'Covalent Bond', 'Hydrogen Bond', 'Metallic Bond'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'chem-8',
+      category: 'chemistry',
+      question: 'What is the main constituent of natural gas?',
+      options: ['Ethane', 'Methane', 'Propane', 'Butane'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'chem-9',
+      category: 'chemistry',
+      question: 'Which acid is found in lemons?',
+      options: ['Lactic Acid', 'Citric Acid', 'Acetic Acid', 'Tartaric Acid'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-10',
+      category: 'chemistry',
+      question: 'What is the lightest element in the periodic table?',
+      options: ['Helium', 'Lithium', 'Hydrogen', 'Beryllium'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-11',
+      category: 'chemistry',
+      question: 'Which gas is known as laughing gas?',
+      options: ['Nitrous Oxide', 'Nitric Oxide', 'Nitrogen Dioxide', 'Ammonia'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'chem-12',
+      category: 'chemistry',
+      question: 'What is the main component of glass?',
+      options: ['Silica', 'Calcium Carbonate', 'Sodium Carbonate', 'Potassium Nitrate'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-13',
+      category: 'chemistry',
+      question: 'Which metal is liquid at room temperature?',
+      options: ['Mercury', 'Gallium', 'Bromine', 'Cesium'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'chem-14',
+      category: 'chemistry',
+      question: 'What is the chemical formula for Chalk?',
+      options: ['CaCO3', 'CaO', 'Ca(OH)2', 'CaCl2'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'chem-15',
+      category: 'chemistry',
+      question: 'What is the heaviest naturally occurring element?',
+      options: ['Uranium', 'Plutonium', 'Thorium', 'Radium'],
+      correctAnswer: 0,
+      difficulty: 'hard',
+      points: 10
+    }
+  ],
+  biology: [
+    {
+      id: 'bio-1',
+      category: 'biology',
+      question: 'What is the powerhouse of the cell?',
+      options: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi Apparatus'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-2',
+      category: 'biology',
+      question: 'Which molecule carries genetic information?',
+      options: ['RNA', 'Protein', 'DNA', 'Lipid'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-3',
+      category: 'biology',
+      question: 'What is the largest organ in the human body?',
+      options: ['Heart', 'Liver', 'Brain', 'Skin'],
+      correctAnswer: 3,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'bio-4',
+      category: 'biology',
+      question: 'Which blood type is the universal donor?',
+      options: ['A+', 'B-', 'AB+', 'O-'],
+      correctAnswer: 3,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'bio-5',
+      category: 'biology',
+      question: 'What is the process by which plants make their food?',
+      options: ['Respiration', 'Digestion', 'Photosynthesis', 'Transpiration'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-6',
+      category: 'biology',
+      question: 'Which part of the brain controls balance and coordination?',
+      options: ['Cerebrum', 'Cerebellum', 'Medulla', 'Hypothalamus'],
+      correctAnswer: 1,
+      difficulty: 'hard',
+      points: 15
+    },
+    {
+      id: 'bio-7',
+      category: 'biology',
+      question: 'What is the basic unit of life?',
+      options: ['Tissue', 'Organ', 'Cell', 'Organism'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-8',
+      category: 'biology',
+      question: 'Which vitamin is produced when the skin is exposed to sunlight?',
+      options: ['Vitamin A', 'Vitamin B', 'Vitamin C', 'Vitamin D'],
+      correctAnswer: 3,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-9',
+      category: 'biology',
+      question: 'How many chambers does the human heart have?',
+      options: ['2', '3', '4', '5'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-10',
+      category: 'biology',
+      question: 'What is the study of fossils called?',
+      options: ['Archaeology', 'Paleontology', 'Geology', 'Anthropology'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'bio-11',
+      category: 'biology',
+      question: 'What is the largest bone in the human body?',
+      options: ['Femur', 'Tibia', 'Humerus', 'Fibula'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'bio-12',
+      category: 'biology',
+      question: 'Which part of the plant conducts water?',
+      options: ['Phloem', 'Xylem', 'Stomata', 'Root Hairs'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'bio-13',
+      category: 'biology',
+      question: 'Who discovered Penicillin?',
+      options: ['Louis Pasteur', 'Alexander Fleming', 'Edward Jenner', 'Robert Koch'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'bio-14',
+      category: 'biology',
+      question: 'What is the average lifespan of a Red Blood Cell?',
+      options: ['120 days', '60 days', '90 days', '30 days'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'bio-15',
+      category: 'biology',
+      question: 'Which organ produces insulin?',
+      options: ['Liver', 'Pancreas', 'Kidney', 'Stomach'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    }
+  ],
+  history: [
+    {
+      id: 'hist-1',
+      category: 'history',
+      question: 'Who was the first President of the United States?',
+      options: ['Thomas Jefferson', 'George Washington', 'Abraham Lincoln', 'John Adams'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-2',
+      category: 'history',
+      question: 'In which year did World War II end?',
+      options: ['1943', '1944', '1945', '1946'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'hist-3',
+      category: 'history',
+      question: 'Which ancient civilization built the pyramids?',
+      options: ['Romans', 'Greeks', 'Egyptians', 'Persians'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-4',
+      category: 'history',
+      question: 'Who discovered America?',
+      options: ['Vasco da Gama', 'Christopher Columbus', 'Ferdinand Magellan', 'Marco Polo'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-5',
+      category: 'history',
+      question: 'The French Revolution started in which year?',
+      options: ['1789', '1776', '1812', '1799'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'hist-6',
+      category: 'history',
+      question: 'Who was known as the "Iron Lady"?',
+      options: ['Indira Gandhi', 'Margaret Thatcher', 'Angela Merkel', 'Golda Meir'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'hist-7',
+      category: 'history',
+      question: 'Which empire was ruled by Genghis Khan?',
+      options: ['Roman Empire', 'Ottoman Empire', 'Mongol Empire', 'British Empire'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'hist-8',
+      category: 'history',
+      question: 'Who painted the Mona Lisa?',
+      options: ['Vincent van Gogh', 'Pablo Picasso', 'Leonardo da Vinci', 'Michelangelo'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-9',
+      category: 'history',
+      question: 'What was the name of the ship that sank in 1912?',
+      options: ['Lusitania', 'Titanic', 'Britannic', 'Olympic'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-10',
+      category: 'history',
+      question: 'Who wrote the "I Have a Dream" speech?',
+      options: ['Malcolm X', 'Martin Luther King Jr.', 'Nelson Mandela', 'Barack Obama'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-11',
+      category: 'history',
+      question: 'Who was the first woman to fly solo across the Atlantic?',
+      options: ['Amelia Earhart', 'Bessie Coleman', 'Harriet Quimby', 'Jacqueline Cochran'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'hist-12',
+      category: 'history',
+      question: 'In which year did the Berlin Wall fall?',
+      options: ['1987', '1989', '1991', '1993'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'hist-13',
+      category: 'history',
+      question: 'Who was the first Emperor of Rome?',
+      options: ['Julius Caesar', 'Augustus', 'Nero', 'Trajan'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'hist-14',
+      category: 'history',
+      question: 'Which war was fought between the North and South regions of the US?',
+      options: ['Revolutionary War', 'Civil War', 'World War I', 'Vietnam War'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'hist-15',
+      category: 'history',
+      question: 'Who was the first human to travel into space?',
+      options: ['Neil Armstrong', 'Buzz Aldrin', 'Yuri Gagarin', 'Alan Shepard'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 5
+    }
+  ],
+  geography: [
+    {
+      id: 'geo-1',
+      category: 'geography',
+      question: 'Which is the largest continent by area?',
+      options: ['Africa', 'North America', 'Europe', 'Asia'],
+      correctAnswer: 3,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'geo-2',
+      category: 'geography',
+      question: 'What is the capital of Japan?',
+      options: ['Seoul', 'Beijing', 'Tokyo', 'Bangkok'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'geo-3',
+      category: 'geography',
+      question: 'Which river is the longest in the world?',
+      options: ['Amazon', 'Nile', 'Yangtze', 'Mississippi'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'geo-4',
+      category: 'geography',
+      question: 'Which country has the largest population?',
+      options: ['India', 'China', 'USA', 'Indonesia'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'geo-5',
+      category: 'geography',
+      question: 'Mount Everest is located in which mountain range?',
+      options: ['Andes', 'Rockies', 'Alps', 'Himalayas'],
+      correctAnswer: 3,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'geo-6',
+      category: 'geography',
+      question: 'Which ocean is the largest?',
+      options: ['Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean', 'Pacific Ocean'],
+      correctAnswer: 3,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'geo-7',
+      category: 'geography',
+      question: 'What is the smallest country in the world?',
+      options: ['Monaco', 'Vatican City', 'San Marino', 'Liechtenstein'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'geo-8',
+      category: 'geography',
+      question: 'Which desert is the largest hot desert in the world?',
+      options: ['Gobi', 'Kalahari', 'Sahara', 'Arabian'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'geo-9',
+      category: 'geography',
+      question: 'Which country is known as the Land of the Rising Sun?',
+      options: ['China', 'Japan', 'Thailand', 'South Korea'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'geo-10',
+      category: 'geography',
+      question: 'What is the capital of Australia?',
+      options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'geo-11',
+      category: 'geography',
+      question: 'Which country has the most islands?',
+      options: ['Philippines', 'Indonesia', 'Sweden', 'Finland'],
+      correctAnswer: 2,
+      difficulty: 'hard',
+      points: 10
+    },
+    {
+      id: 'geo-12',
+      category: 'geography',
+      question: 'What is the longest river in Europe?',
+      options: ['Danube', 'Volga', 'Rhine', 'Seine'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'geo-13',
+      category: 'geography',
+      question: 'Which continent is known as the "Dark Continent"?',
+      options: ['Asia', 'South America', 'Africa', 'Australia'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'geo-14',
+      category: 'geography',
+      question: 'What is the capital of Canada?',
+      options: ['Toronto', 'Vancouver', 'Ottawa', 'Montreal'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'geo-15',
+      category: 'geography',
+      question: 'Which two countries share the longest international border?',
+      options: ['USA and Canada', 'Russia and China', 'Chile and Argentina', 'India and Pakistan'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 10
+    }
+  ],
+  literature: [
+    {
+      id: 'lit-1',
+      category: 'literature',
+      question: 'Who wrote "Romeo and Juliet"?',
+      options: ['Charles Dickens', 'William Shakespeare', 'Mark Twain', 'Jane Austen'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-2',
+      category: 'literature',
+      question: 'What is the title of the first Harry Potter book?',
+      options: ['Chamber of Secrets', 'Prisoner of Azkaban', 'Philosopher\'s Stone', 'Goblet of Fire'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-3',
+      category: 'literature',
+      question: 'Who is the author of "1984"?',
+      options: ['George Orwell', 'Aldous Huxley', 'Ray Bradbury', 'F. Scott Fitzgerald'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 5
+    },
+    {
+      id: 'lit-4',
+      category: 'literature',
+      question: 'What is the longest epic poem in the world?',
+      options: ['The Iliad', 'The Odyssey', 'Mahabharata', 'Ramayana'],
+      correctAnswer: 2,
+      difficulty: 'hard',
+      points: 15
+    },
+    {
+      id: 'lit-5',
+      category: 'literature',
+      question: 'Who is the author of "The Great Gatsby"?',
+      options: ['Ernest Hemingway', 'F. Scott Fitzgerald', 'John Steinbeck', 'William Faulkner'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'lit-6',
+      category: 'literature',
+      question: 'In "Moby Dick", what animal is Moby Dick?',
+      options: ['Shark', 'Whale', 'Squid', 'Turtle'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-7',
+      category: 'literature',
+      question: 'Who wrote "Pride and Prejudice"?',
+      options: ['Charlotte Bronte', 'Emily Bronte', 'Jane Austen', 'Virginia Woolf'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'lit-8',
+      category: 'literature',
+      question: 'Which detective was created by Arthur Conan Doyle?',
+      options: ['Hercule Poirot', 'Sherlock Holmes', 'Miss Marple', 'Sam Spade'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-9',
+      category: 'literature',
+      question: 'Who wrote "The Hobbit"?',
+      options: ['C.S. Lewis', 'J.K. Rowling', 'J.R.R. Tolkien', 'George R.R. Martin'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-10',
+      category: 'literature',
+      question: 'What is the pen name of Samuel Langhorne Clemens?',
+      options: ['O. Henry', 'Mark Twain', 'George Orwell', 'Lewis Carroll'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'lit-11',
+      category: 'literature',
+      question: 'Who wrote "The Catcher in the Rye"?',
+      options: ['J.D. Salinger', 'Ernest Hemingway', 'F. Scott Fitzgerald', 'John Steinbeck'],
+      correctAnswer: 0,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'lit-12',
+      category: 'literature',
+      question: 'Who is the author of "The Chronicles of Narnia"?',
+      options: ['J.R.R. Tolkien', 'C.S. Lewis', 'Roald Dahl', 'Enid Blyton'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-13',
+      category: 'literature',
+      question: 'In which city is "Sherlock Holmes" based?',
+      options: ['New York', 'Paris', 'London', 'Edinburgh'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'lit-14',
+      category: 'literature',
+      question: 'Who wrote "War and Peace"?',
+      options: ['Fyodor Dostoevsky', 'Leo Tolstoy', 'Anton Chekhov', 'Vladimir Nabokov'],
+      correctAnswer: 1,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'lit-15',
+      category: 'literature',
+      question: 'What is the name of the protagonist in "The Hunger Games"?',
+      options: ['Katniss Everdeen', 'Hermione Granger', 'Bella Swan', 'Tris Prior'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    }
+  ],
+  general_knowledge: [
+    {
+      id: 'gk-1',
+      category: 'general_knowledge',
+      question: 'How many days are in a leap year?',
+      options: ['364', '365', '366', '367'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-2',
+      category: 'general_knowledge',
+      question: 'What is the chemical symbol for water?',
+      options: ['H2O', 'CO2', 'O2', 'NaCl'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-3',
+      category: 'general_knowledge',
+      question: 'Which planet is known as the Red Planet?',
+      options: ['Venus', 'Jupiter', 'Mars', 'Saturn'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-4',
+      category: 'general_knowledge',
+      question: 'How many colors are there in a rainbow?',
+      options: ['5', '6', '7', '8'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-5',
+      category: 'general_knowledge',
+      question: 'What does CPU stand for?',
+      options: ['Central Processing Unit', 'Central Program Unit', 'Computer Personal Unit', 'Central Processor Unit'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-6',
+      category: 'general_knowledge',
+      question: 'Which is the fastest land animal?',
+      options: ['Lion', 'Cheetah', 'Leopard', 'Tiger'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-7',
+      category: 'general_knowledge',
+      question: 'What is the boiling point of water?',
+      options: ['90°C', '100°C', '110°C', '120°C'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-8',
+      category: 'general_knowledge',
+      question: 'Which is the largest ocean?',
+      options: ['Atlantic', 'Indian', 'Pacific', 'Arctic'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-9',
+      category: 'general_knowledge',
+      question: 'Who is the founder of Microsoft?',
+      options: ['Steve Jobs', 'Bill Gates', 'Mark Zuckerberg', 'Elon Musk'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-10',
+      category: 'general_knowledge',
+      question: 'Which bird cannot fly?',
+      options: ['Eagle', 'Ostrich', 'Parrot', 'Sparrow'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-11',
+      category: 'general_knowledge',
+      question: 'Which country won the first FIFA World Cup?',
+      options: ['Brazil', 'Argentina', 'Uruguay', 'Italy'],
+      correctAnswer: 2,
+      difficulty: 'medium',
+      points: 10
+    },
+    {
+      id: 'gk-12',
+      category: 'general_knowledge',
+      question: 'What is the currency of the United Kingdom?',
+      options: ['Euro', 'Dollar', 'Pound Sterling', 'Yen'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-13',
+      category: 'general_knowledge',
+      question: 'Who invented the telephone?',
+      options: ['Thomas Edison', 'Alexander Graham Bell', 'Nikola Tesla', 'Guglielmo Marconi'],
+      correctAnswer: 1,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-14',
+      category: 'general_knowledge',
+      question: 'What does the "www" stand for in a website browser?',
+      options: ['World Wide Web', 'World Web Wide', 'Wide World Web', 'Web World Wide'],
+      correctAnswer: 0,
+      difficulty: 'easy',
+      points: 5
+    },
+    {
+      id: 'gk-15',
+      category: 'general_knowledge',
+      question: 'How many players are there in a cricket team?',
+      options: ['9', '10', '11', '12'],
+      correctAnswer: 2,
+      difficulty: 'easy',
+      points: 5
+    }
   ]
 };
 

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { QuizCategory } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Network, Database, Cpu, BinaryIcon, Clock, Coins, Sparkles, Trophy, Target, Award, Calculator, Brain, Book, Code } from 'lucide-react';
+import { Network, Database, Cpu, BinaryIcon, Clock, Coins, Sparkles, Trophy, Target, Award, Calculator, Brain, Book, Code, Atom, FlaskConical, Dna, Scroll, Globe, Feather, Lightbulb } from 'lucide-react';
 import { EnhancedQuizModal } from './EnhancedQuizModal';
 
 const categoryData = {
@@ -71,6 +71,62 @@ const categoryData = {
     gradient: 'from-slate-500 to-gray-500',
     difficulty: 'medium',
     timeLimit: 150
+  },
+  physics: {
+    icon: Atom,
+    title: 'Physics',
+    description: 'Mechanics, thermodynamics, electromagnetism, and quantum concepts.',
+    gradient: 'from-violet-500 to-fuchsia-500',
+    difficulty: 'hard',
+    timeLimit: 180
+  },
+  chemistry: {
+    icon: FlaskConical,
+    title: 'Chemistry',
+    description: 'Atomic structure, periodic table, reactions, and organic chemistry.',
+    gradient: 'from-lime-500 to-green-500',
+    difficulty: 'medium',
+    timeLimit: 150
+  },
+  biology: {
+    icon: Dna,
+    title: 'Biology',
+    description: 'Cell biology, genetics, ecology, and human anatomy.',
+    gradient: 'from-emerald-400 to-cyan-400',
+    difficulty: 'medium',
+    timeLimit: 150
+  },
+  history: {
+    icon: Scroll,
+    title: 'History',
+    description: 'Ancient civilizations, world wars, and historical figures.',
+    gradient: 'from-amber-600 to-orange-600',
+    difficulty: 'medium',
+    timeLimit: 150
+  },
+  geography: {
+    icon: Globe,
+    title: 'Geography',
+    description: 'World maps, capitals, physical features, and climate.',
+    gradient: 'from-sky-500 to-blue-500',
+    difficulty: 'easy',
+    timeLimit: 120
+  },
+  literature: {
+    icon: Feather,
+    title: 'Literature',
+    description: 'Famous authors, classic novels, poetry, and literary devices.',
+    gradient: 'from-rose-400 to-pink-400',
+    difficulty: 'medium',
+    timeLimit: 150
+  },
+  general_knowledge: {
+    icon: Lightbulb,
+    title: 'General Knowledge',
+    description: 'Test your awareness of facts, trivia, and current affairs.',
+    gradient: 'from-yellow-400 to-orange-400',
+    difficulty: 'easy',
+    timeLimit: 120
   }
 };
 
@@ -84,6 +140,34 @@ interface QuizCategoryCardsProps {
 export function QuizCategoryCards({ onQuizComplete, userStreaks, lastQuizDates, quizResults }: QuizCategoryCardsProps) {
   const [selectedCategory, setSelectedCategory] = useState<QuizCategory | null>(null);
   const [viewingResults, setViewingResults] = useState<QuizCategory | null>(null);
+
+  // Daily Shuffle Logic
+  const dailyCategories = useMemo(() => {
+    // Seeded random number generator
+    const seededRandom = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+
+    const today = new Date();
+    // Use YYYYMMDD as seed base to ensure daily rotation
+    const seedBase = (today.getFullYear() * 10000) + ((today.getMonth() + 1) * 100) + today.getDate();
+    
+    const allCategories = Object.entries(categoryData) as [QuizCategory, typeof categoryData['ds_algo']][];
+    
+    // Fisher-Yates shuffle with seeded random
+    const shuffled = [...allCategories];
+    let currentSeed = seedBase;
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const r = seededRandom(currentSeed++);
+      const j = Math.floor(r * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    // Return 6 categories for daily rotation
+    return shuffled.slice(0, 6);
+  }, []);
 
   const canTakeQuiz = (category: QuizCategory) => {
     const lastDate = lastQuizDates?.[category];
@@ -112,9 +196,19 @@ export function QuizCategoryCards({ onQuizComplete, userStreaks, lastQuizDates, 
   };
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {Object.entries(categoryData).map(([key, data]) => {
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Today's Featured Quizzes</h2>
+          <p className="text-muted-foreground">New set of quizzes available every day!</p>
+        </div>
+        <div className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full">
+          {new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        {dailyCategories.map(([key, data]) => {
           const category = key as QuizCategory;
           
           const IconComponent = data.icon;
@@ -286,6 +380,6 @@ export function QuizCategoryCards({ onQuizComplete, userStreaks, lastQuizDates, 
           </DialogContent>
         </Dialog>
       )}
-    </>
+    </div>
   );
 }

@@ -83,20 +83,53 @@ export const signUp = async (email: string, password: string, displayName: strin
       ds_algo: 0,
       database: 0,
       os: 0,
-      networks: 0
+      networks: 0,
+      math: 0,
+      aptitude: 0,
+      grammar: 0,
+      programming: 0,
+      physics: 0,
+      chemistry: 0,
+      biology: 0,
+      history: 0,
+      geography: 0,
+      literature: 0,
+      general_knowledge: 0
     },
     lastQuizDates: {
       ds_algo: null,
       database: null,
       os: null,
-      networks: null
+      networks: null,
+      math: null,
+      aptitude: null,
+      grammar: null,
+      programming: null,
+      physics: null,
+      chemistry: null,
+      biology: null,
+      history: null,
+      geography: null,
+      literature: null,
+      general_knowledge: null
     },
     badges: [],
     totalQuizCorrect: {
       ds_algo: 0,
       database: 0,
       os: 0,
-      networks: 0
+      networks: 0,
+      math: 0,
+      aptitude: 0,
+      grammar: 0,
+      programming: 0,
+      physics: 0,
+      chemistry: 0,
+      biology: 0,
+      history: 0,
+      geography: 0,
+      literature: 0,
+      general_knowledge: 0
     },
     perfectDays: 0,
     perfectWeeks: 0,
@@ -484,16 +517,19 @@ export const submitQuizResult = async (uid: string, category: QuizCategory, ques
       lastLoginDate: null,
       quizStreaks: { 
         ds_algo: 0, database: 0, os: 0, networks: 0,
-        math: 0, aptitude: 0, grammar: 0, programming: 0 
+        math: 0, aptitude: 0, grammar: 0, programming: 0,
+        physics: 0, chemistry: 0, biology: 0, history: 0, geography: 0, literature: 0, general_knowledge: 0
       },
       lastQuizDates: { 
         ds_algo: null, database: null, os: null, networks: null,
-        math: null, aptitude: null, grammar: null, programming: null 
+        math: null, aptitude: null, grammar: null, programming: null,
+        physics: null, chemistry: null, biology: null, history: null, geography: null, literature: null, general_knowledge: null
       },
       badges: [],
       totalQuizCorrect: { 
         ds_algo: 0, database: 0, os: 0, networks: 0,
-        math: 0, aptitude: 0, grammar: 0, programming: 0 
+        math: 0, aptitude: 0, grammar: 0, programming: 0,
+        physics: 0, chemistry: 0, biology: 0, history: 0, geography: 0, literature: 0, general_knowledge: 0
       },
       perfectDays: 0,
       perfectWeeks: 0,
@@ -862,6 +898,7 @@ export const checkLeaderboardChanges = async () => {
 export const checkAllCategoriesCompletedToday = async (uid: string): Promise<boolean> => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  // Only checking core categories for perfect day streak to avoid making it too hard
   const categories: QuizCategory[] = ['ds_algo', 'database', 'os', 'networks'];
 
   for (const category of categories) {

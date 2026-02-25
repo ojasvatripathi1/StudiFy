@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { BinaryIcon, Database, Cpu, Network, Clock, Award, Lightbulb, Loader2, AlertTriangle, Calculator, Brain, Book, Code } from 'lucide-react';
+import { BinaryIcon, Database, Cpu, Network, Clock, Award, Lightbulb, Loader2, AlertTriangle, Calculator, Brain, Book, Code, Atom, FlaskConical, Dna, Scroll, Globe, Feather } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
@@ -22,7 +22,14 @@ const categoryIcons = {
   math: Calculator,
   aptitude: Brain,
   grammar: Book,
-  programming: Code
+  programming: Code,
+  physics: Atom,
+  chemistry: FlaskConical,
+  biology: Dna,
+  history: Scroll,
+  geography: Globe,
+  literature: Feather,
+  general_knowledge: Lightbulb
 };
 
 const categoryColors = {
@@ -33,7 +40,14 @@ const categoryColors = {
   math: 'bg-yellow-500',
   aptitude: 'bg-pink-500',
   grammar: 'bg-teal-500',
-  programming: 'bg-slate-500'
+  programming: 'bg-slate-500',
+  physics: 'bg-violet-500',
+  chemistry: 'bg-lime-500',
+  biology: 'bg-emerald-500',
+  history: 'bg-amber-600',
+  geography: 'bg-sky-500',
+  literature: 'bg-rose-400',
+  general_knowledge: 'bg-yellow-400'
 };
 
 const getTimeLimit = (difficulty: 'easy' | 'medium' | 'hard'): number => {

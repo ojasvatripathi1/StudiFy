@@ -114,7 +114,14 @@ export default function Dashboard() {
     math: null,
     aptitude: null,
     grammar: null,
-    programming: null
+    programming: null,
+    physics: null,
+    chemistry: null,
+    biology: null,
+    history: null,
+    geography: null,
+    literature: null,
+    general_knowledge: null
   });
 
   useEffect(() => {
@@ -475,7 +482,18 @@ export default function Dashboard() {
                   ds_algo: 0,
                   database: 0,
                   os: 0,
-                  networks: 0
+                  networks: 0,
+                  math: 0,
+                  aptitude: 0,
+                  grammar: 0,
+                  programming: 0,
+                  physics: 0,
+                  chemistry: 0,
+                  biology: 0,
+                  history: 0,
+                  geography: 0,
+                  literature: 0,
+                  general_knowledge: 0
                 }}
                 lastQuizDates={userData.lastQuizDates ? {
                   ds_algo: userData.lastQuizDates.ds_algo?.toDate() ?? null,
@@ -485,7 +503,14 @@ export default function Dashboard() {
                   math: userData.lastQuizDates.math?.toDate() ?? null,
                   aptitude: userData.lastQuizDates.aptitude?.toDate() ?? null,
                   grammar: userData.lastQuizDates.grammar?.toDate() ?? null,
-                  programming: userData.lastQuizDates.programming?.toDate() ?? null
+                  programming: userData.lastQuizDates.programming?.toDate() ?? null,
+                  physics: userData.lastQuizDates.physics?.toDate() ?? null,
+                  chemistry: userData.lastQuizDates.chemistry?.toDate() ?? null,
+                  biology: userData.lastQuizDates.biology?.toDate() ?? null,
+                  history: userData.lastQuizDates.history?.toDate() ?? null,
+                  geography: userData.lastQuizDates.geography?.toDate() ?? null,
+                  literature: userData.lastQuizDates.literature?.toDate() ?? null,
+                  general_knowledge: userData.lastQuizDates.general_knowledge?.toDate() ?? null
                 } : undefined}
                 quizResults={quizResults}
               />

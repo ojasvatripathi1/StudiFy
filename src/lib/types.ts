@@ -98,7 +98,7 @@ export interface LeaderboardEntry {
   previousRank?: number;
 }
 
-export type QuizCategory = 'ds_algo' | 'database' | 'os' | 'networks' | 'math' | 'aptitude' | 'grammar' | 'programming';
+export type QuizCategory = 'ds_algo' | 'database' | 'os' | 'networks' | 'math' | 'aptitude' | 'grammar' | 'programming' | 'physics' | 'chemistry' | 'biology' | 'history' | 'geography' | 'literature' | 'general_knowledge';
 
 export interface DailyStats {
   date: string; // YYYY-MM-DD format
