@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { DailyStats, Transaction } from '@/lib/types';
+import { DailyStats, Transaction, UserData } from '@/lib/types';
 import { getDailyStats, getUserData } from '@/lib/firebase';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, Coins, Trophy, AlertTriangle, BarChart3, Activity } from 'lucide-react';

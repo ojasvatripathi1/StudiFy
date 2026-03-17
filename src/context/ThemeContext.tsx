@@ -58,13 +58,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const colors = theme.metadata.themeColors;
         const root = document.documentElement;
 
-        // Note: Simple conversion for now. In a real app we'd need HSL conversion if using shadcn
-        // Since StudiFy uses Tailwind with CSS variables in Poppins/Standard format:
         if (colors.primary) {
-            // We need to convert hex/rgb to HSL string format that Globals.css expects: "H S% L%"
-            // For now, let's just override the direct variables if possible or use !important
-            // Better approach: set the variables directly if they are standard CSS
-            root.style.setProperty('--primary', hexToHSL(colors.primary));
+            const primaryHSL = hexToHSL(colors.primary);
+            root.style.setProperty('--primary', primaryHSL);
+            // Accent follows primary so themed buttons/accents match the chosen color
+            root.style.setProperty('--accent', primaryHSL);
             if (colors.secondary) {
                 root.style.setProperty('--secondary', hexToHSL(colors.secondary));
             }
@@ -75,6 +73,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const root = document.documentElement;
         root.style.removeProperty('--primary');
         root.style.removeProperty('--secondary');
+        root.style.removeProperty('--accent');
     };
 
     const refreshTheme = async () => {

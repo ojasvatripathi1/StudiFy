@@ -109,7 +109,7 @@ export interface DailyStats {
   transactions: Array<{
     amount: number;
     type: 'credit' | 'debit';
-    category?: 'bonus' | 'quiz' | 'penalty' | 'badge' | 'welcome';
+    category?: 'bonus' | 'quiz' | 'penalty' | 'badge' | 'welcome' | 'study_session';
     description: string;
     timestamp: Date | { toDate: () => Date };
   }>;

@@ -35,7 +35,7 @@ export async function chatWithGroq(
 - Rank: ${userData.rank || 'Unranked'}
 - Login Streak: ${userData.loginStreak} days
 - Total Quizzes Taken: ${userData.totalQuizzesTaken}
-- Badges: ${userData.badges?.length > 0 ? userData.badges.join(', ') : 'None'}
+- Badges: ${userData.badges && userData.badges.length > 0 ? userData.badges.join(', ') : 'None'}
 - Quiz Streaks: DS/Algo: ${userData.quizStreaks?.ds_algo}, DB: ${userData.quizStreaks?.database}, OS: ${userData.quizStreaks?.os}, Networks: ${userData.quizStreaks?.networks}
 - Perfect Days: ${userData.perfectDays}
 
@@ -142,7 +142,7 @@ export async function streamChatWithGroq(
 - Rank: ${userData.rank || 'Unranked'}
 - Login Streak: ${userData.loginStreak} days
 - Total Quizzes Taken: ${userData.totalQuizzesTaken}
-- Badges: ${userData.badges?.length > 0 ? userData.badges.join(', ') : 'None'}
+- Badges: ${userData.badges && userData.badges.length > 0 ? userData.badges.join(', ') : 'None'}
 - Quiz Streaks: DS/Algo: ${userData.quizStreaks?.ds_algo}, DB: ${userData.quizStreaks?.database}, OS: ${userData.quizStreaks?.os}, Networks: ${userData.quizStreaks?.networks}
 - Perfect Days: ${userData.perfectDays}
 

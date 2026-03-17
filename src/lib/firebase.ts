@@ -388,18 +388,27 @@ export const claimDailyBonus = async (uid: string) => {
   if (!userSnap.exists()) throw new Error("User not found");
   const userData = userSnap.data() as UserData;
 
-  // Calculate streak and bonus amount
+  // Calculate streak using calendar dates (not raw milliseconds)
+  // Raw millisecond diff is unreliable — e.g. claiming at 9:59 PM vs 10:00 PM the day before
+  // gives ~23.98h which Math.floor rounds to 0, incorrectly treating it as "same day".
   const today = new Date();
+  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const lastLogin = userData.lastLoginDate?.toDate();
   let newStreak = 1;
 
   if (lastLogin) {
-    const daysDiff = Math.floor((today.getTime() - lastLogin.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysDiff === 1) {
-      newStreak = userData.loginStreak + 1;
-    } else if (daysDiff > 1) {
-      // Streak broken, apply penalty
-      await applyPenalty(uid, 'missed_login', userData.loginStreak * 5);
+    const lastLoginMidnight = new Date(lastLogin.getFullYear(), lastLogin.getMonth(), lastLogin.getDate());
+    const daysDiff = Math.round((todayMidnight.getTime() - lastLoginMidnight.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (daysDiff === 0) {
+      // Same calendar day — bonus already claimed today, preserve current streak
+      newStreak = userData.loginStreak || 1;
+    } else if (daysDiff === 1) {
+      // Consecutive day — extend streak
+      newStreak = (userData.loginStreak || 0) + 1;
+    } else {
+      // Missed one or more days — reset streak and apply penalty
+      await applyPenalty(uid, 'missed_login', (userData.loginStreak || 0) * 5);
       newStreak = 1;
     }
   }
@@ -555,22 +564,25 @@ export const submitQuizResult = async (uid: string, category: QuizCategory, ques
     userData = userSnap.data() as UserData;
   }
 
-  // Calculate quiz streak
+  // Calculate quiz streak using calendar dates (same fix as login streak)
   const today = new Date();
+  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const lastQuizDate = userData.lastQuizDates?.[category]?.toDate();
   let newStreak = 1;
 
   if (lastQuizDate) {
-    const daysDiff = Math.floor((today.getTime() - lastQuizDate.getTime()) / (1000 * 60 * 60 * 24));
+    const lastQuizMidnight = new Date(lastQuizDate.getFullYear(), lastQuizDate.getMonth(), lastQuizDate.getDate());
+    const daysDiff = Math.round((todayMidnight.getTime() - lastQuizMidnight.getTime()) / (1000 * 60 * 60 * 24));
+
     if (daysDiff === 0) {
+      // Same calendar day — preserve existing streak
       newStreak = userData.quizStreaks?.[category] || 1;
     } else if (daysDiff === 1) {
-      const streak = userData.quizStreaks?.[category];
-      newStreak = (streak || 0) + 1;
-    } else if (daysDiff > 1) {
-      // Apply penalty for missed quiz
-      const streak = userData.quizStreaks?.[category];
-      await applyPenalty(uid, 'missed_quiz', (streak || 0) * 2);
+      // Consecutive day — extend streak
+      newStreak = (userData.quizStreaks?.[category] || 0) + 1;
+    } else {
+      // Missed days — reset streak and apply penalty
+      await applyPenalty(uid, 'missed_quiz', (userData.quizStreaks?.[category] || 0) * 2);
       newStreak = 1;
     }
   }
@@ -928,23 +940,10 @@ export const checkAllCategoriesCompletedToday = async (uid: string): Promise<boo
   return true;
 };
 
-export interface DailyStat {
-  date: string;
-  coinsEarned: number;
-  quizzesTaken: number;
-  loginBonus: number;
-  penalties: number;
-  transactions: {
-    amount: number;
-    type: string;
-    category: string;
-    description: string;
-    timestamp: Date | Timestamp;
-  }[];
-}
+import { DailyStats } from './types';
 
-export const getDailyStats = async (uid: string, startDate?: Date, endDate: Date = new Date()): Promise<DailyStat[]> => {
-  const stats: DailyStat[] = [];
+export const getDailyStats = async (uid: string, startDate?: Date, endDate: Date = new Date()): Promise<DailyStats[]> => {
+  const stats: DailyStats[] = [];
 
   // If no startDate is provided, default to 30 days ago
   if (!startDate) {
@@ -1038,8 +1037,8 @@ export const getDailyStats = async (uid: string, startDate?: Date, endDate: Date
         penalties,
         transactions: dayTransactions.map(t => ({
           amount: t.amount,
-          type: t.type,
-          category: t.category,
+          type: t.type as 'credit' | 'debit',
+          category: t.category as 'bonus' | 'quiz' | 'penalty' | 'badge' | 'welcome' | 'study_session',
           description: t.description,
           timestamp: t.timestamp
         }))

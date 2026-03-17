@@ -27,6 +27,7 @@ import StudyAssistantChatbot from '@/components/StudyAssistantChatbot';
 import StudySessionTab from '@/components/StudySessionTab';
 import StudyInsightsTab from '@/components/StudyInsightsTab';
 import ShopTab from '@/components/ShopTab';
+import StudyMaterialsTab from '@/components/StudyMaterialsTab';
 import CustomizationTab from '@/components/CustomizationTab';
 import ProfileTab from '@/components/ProfileTab';
 import { 
@@ -43,7 +44,8 @@ import {
   User,
   Zap,
   Menu,
-  ChevronRight
+  ChevronRight,
+  Library
 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -88,6 +90,7 @@ export default function Dashboard() {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'quizzes', label: 'Quizzes', icon: FileText },
     { id: 'study-sessions', label: 'Study', icon: Timer },
+    { id: 'study-materials', label: 'Study Materials', icon: Library },
     { id: 'insights', label: 'Insights', icon: Sparkles },
     { id: 'study-assistant', label: 'Study AI', icon: MessageSquare },
     { id: 'badges', label: 'Badges', icon: Trophy },
@@ -101,7 +104,7 @@ export default function Dashboard() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tab = params.get('tab');
-    if (tab && ['dashboard', 'quizzes', 'study-sessions', 'insights', 'study-assistant', 'badges', 'shop', 'analytics', 'notifications', 'customization', 'profile'].includes(tab)) {
+    if (tab && ['dashboard', 'quizzes', 'study-sessions', 'study-materials', 'insights', 'study-assistant', 'badges', 'shop', 'analytics', 'notifications', 'customization', 'profile'].includes(tab)) {
       setActiveTab(tab);
     }
   }, []);
@@ -530,6 +533,21 @@ export default function Dashboard() {
               </div>
             </div>
             <StudySessionTab onSessionActiveChange={setIsStudySessionActive} onSessionComplete={fetchData} />
+          </TabsContent>
+
+          <TabsContent value="study-materials" className="mt-0 animate-in fade-in duration-700 space-y-12">
+            <div className="flex items-center gap-4">
+              <div className="p-3.5 rounded-[1.2rem] bg-indigo-500/10 text-indigo-500 ring-1 ring-indigo-500/20">
+                <Library className="h-6 w-6" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500/70">Resource Library</span>
+                <h2 className="text-3xl font-black uppercase tracking-tight text-foreground">
+                  Study Materials
+                </h2>
+              </div>
+            </div>
+            <StudyMaterialsTab />
           </TabsContent>
 
           <TabsContent value="insights" className="mt-0 animate-in fade-in duration-700 space-y-12">

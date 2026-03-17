@@ -261,7 +261,7 @@ export default function StudyInsightsTab() {
             </p>
             
             <Button 
-              onClick={() => window.location.href = '/dashboard'} 
+              onClick={() => window.location.href = '/?tab=study-sessions'} 
               className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase tracking-[0.2em] hover:shadow-2xl hover:shadow-primary/40 transition-all duration-500"
             >
               Start Session

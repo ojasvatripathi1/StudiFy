@@ -12,6 +12,7 @@ import {
   Timestamp,
   updateDoc,
   runTransaction,
+  deleteDoc,
 } from "firebase/firestore";
 import { db, checkAndAwardBadges } from './firebase';
 import { StudySession, SessionInsight, SubjectType, SessionStatus } from './studySessionTypes';
