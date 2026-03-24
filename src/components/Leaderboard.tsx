@@ -5,6 +5,7 @@ import { Crown, Medal, Trophy, TrendingUp, Coins } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getShopItems } from "@/lib/shopFirebase";
 import Image from "next/image";
+import { getCurrentAvatarPath } from "@/lib/avatarUtils";
 
 type LeaderboardProps = {
   users: UserData[];
@@ -129,8 +130,8 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                             )}
 
                             {user.avatarUrl ? (
-                              <Image 
-                                src={user.avatarUrl} 
+                                <Image 
+                                  src={getCurrentAvatarPath(user.avatarUrl)} 
                                 alt={user.displayName || 'User'} 
                                 fill 
                                 unoptimized={true}
