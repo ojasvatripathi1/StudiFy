@@ -231,6 +231,7 @@ export default function ProfileTab({ user, onUpdate }: ProfileTabProps) {
                       alt="Avatar" 
                       width={176} 
                       height={176} 
+                      unoptimized={true}
                       className="relative z-[5] object-cover transition-transform duration-700 group-hover/avatar:scale-110"
                     />
                   </div>
@@ -335,6 +336,7 @@ export default function ProfileTab({ user, onUpdate }: ProfileTabProps) {
                       src={url} 
                       alt="Avatar option" 
                       fill 
+                      unoptimized={true}
                       className="object-cover transition-transform duration-700 group-hover/opt:scale-125"
                     />
                     {avatarUrl === url && (

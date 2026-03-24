@@ -133,6 +133,7 @@ export function Leaderboard({ users, currentUserId }: LeaderboardProps) {
                                 src={user.avatarUrl} 
                                 alt={user.displayName || 'User'} 
                                 fill 
+                                unoptimized={true}
                                 className="object-cover group-hover/row:scale-110 transition-transform duration-500"
                               />
                             ) : (

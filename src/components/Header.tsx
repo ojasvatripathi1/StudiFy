@@ -146,6 +146,7 @@ export function Header({ user, onProfileClick, onLogoClick }: HeaderProps) {
                   src={getCurrentAvatarPath(user.avatarUrl) || DEFAULT_AVATAR} 
                   alt="User Avatar" 
                   fill 
+                  unoptimized={true}
                   sizes="(max-width: 768px) 32px, 24px"
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
