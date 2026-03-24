@@ -178,7 +178,7 @@ export const signInWithGoogle = async () => {
         email: user.email || '',
         displayName: user.displayName || 'Anonymous',
         username: "", // To be set by user on profile page
-        avatarUrl: "/3d_avatar_studify/1.png", // Default avatar
+        avatarUrl: "/3d_avatar_studify/MaleAvatars/1.png", // Default avatar
         coins: 500, // Initial bonus
         lastBonusClaimed: null,
         loginStreak: 0,
@@ -262,7 +262,22 @@ export const getUserData = async (uid: string): Promise<UserData | null> => {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
   if (userSnap.exists()) {
-    return userSnap.data() as UserData;
+    const data = userSnap.data() as UserData;
+    // Lazy migration: Ensure mandatory fields exist
+    if (data.coins === undefined || !data.avatarUrl || data.avatarUrl === "/3d_avatar_studify/1.png") {
+      const updatedData = {
+        ...data,
+        coins: data.coins ?? 500,
+        avatarUrl: (!data.avatarUrl || data.avatarUrl === "/3d_avatar_studify/1.png") 
+          ? "/3d_avatar_studify/MaleAvatars/1.png" 
+          : data.avatarUrl,
+        username: data.username ?? "",
+        displayName: data.displayName ?? "Anonymous",
+      };
+      await updateDoc(userRef, updatedData);
+      return updatedData as UserData;
+    }
+    return data;
   }
   return null;
 };
@@ -327,16 +342,22 @@ export const updateUserProfile = async (
 export const getLeaderboard = async (userLimit: number = 50): Promise<UserData[]> => {
   try {
     const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("coins", "desc"), limit(userLimit));
+    // Fetch users. If we use orderBy("coins"), users without a "coins" field are excluded.
+    // Given the small number of users, we'll fetch all up to the limit and sort in-memory.
+    const q = query(usersRef, limit(userLimit));
     const querySnapshot = await getDocs(q);
 
-    // Deduplicate users by uid to prevent duplicate keys
-    const users = querySnapshot.docs.map(doc => doc.data() as UserData);
+    let users = querySnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id } as UserData));
+    
+    // Sort by coins descending, handling missing coins
+    users.sort((a, b) => (b.coins || 0) - (a.coins || 0));
+
+    // Deduplicate by uid (though they should be unique from Firestore docs)
     const uniqueUsers = users.filter((user, index, self) =>
       index === self.findIndex(u => u.uid === user.uid)
     );
 
-    return uniqueUsers;
+    return uniqueUsers.slice(0, userLimit);
   } catch (error) {
     console.error("Error fetching leaderboard:", error);
     return [];
