@@ -1,0 +1,5 @@
+﻿src/components/DailyQuizCard.tsx(247,33): error TS2304: Cannot find name 'collection'.
+src/lib/groqService.ts(38,13): error TS18048: 'userData.badges.length' is possibly 'undefined'.
+src/lib/groqService.ts(38,43): error TS18048: 'userData.badges' is possibly 'undefined'.
+src/lib/groqService.ts(145,13): error TS18048: 'userData.badges.length' is possibly 'undefined'.
+src/lib/groqService.ts(145,43): error TS18048: 'userData.badges' is possibly 'undefined'.
