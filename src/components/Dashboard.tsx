@@ -157,7 +157,7 @@ export default function Dashboard() {
         // Fetch rank, leaderboard, and transactions in parallel
         const [rank, leaders, userTransactions] = await Promise.all([
           getUserRank(user.uid, data.coins),
-          getLeaderboard(),
+          getLeaderboard(50),
           getTransactions(user.uid)
         ]);
 
@@ -239,7 +239,7 @@ export default function Dashboard() {
       }
 
       const updatedTransactions = await getTransactions(user.uid);
-      const updatedLeaderboard = await getLeaderboard();
+       const updatedLeaderboard = await getLeaderboard(50);
 
       setTransactions(updatedTransactions);
       setLeaderboard(updatedLeaderboard);

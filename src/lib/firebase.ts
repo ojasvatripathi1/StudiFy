@@ -324,7 +324,7 @@ export const updateUserProfile = async (
   });
 };
 
-export const getLeaderboard = async (userLimit: number = 10): Promise<UserData[]> => {
+export const getLeaderboard = async (userLimit: number = 50): Promise<UserData[]> => {
   try {
     const usersRef = collection(db, "users");
     const q = query(usersRef, orderBy("coins", "desc"), limit(userLimit));
