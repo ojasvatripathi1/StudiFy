@@ -1,0 +1,500 @@
+[
+  {
+    "id": "TC001",
+    "title": "Sign up creates account and lands user on dashboard",
+    "description": "Verifies a new user can sign up with valid credentials and is taken to the profile dashboard after submitting the signup form.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Fill new unique email into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid strong password into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the signup form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Login grants access to dashboard",
+    "description": "Verifies an existing user can log in with valid credentials and reach the profile dashboard.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Protected dashboard redirects to login when logged out",
+    "description": "Verifies a logged-out visitor attempting to access the profile dashboard is redirected to the login page.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Dashboard loads key insights blocks without crashing",
+    "description": "Verifies an authenticated user can load the profile dashboard and see core insight sections like coin balance, streak, and charts.",
+    "category": "User Dashboard (Profile)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the profile dashboard shows coin balance, streak, and study progress data"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Purchase an affordable shop item updates coin balance",
+    "description": "Verifies a learner can buy an item in the coin shop and the displayed coin balance updates after confirmation.",
+    "category": "Coin Shop",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the coin shop"
+      },
+      {
+        "type": "action",
+        "description": "Select a shop item that is affordable with the currently displayed coin balance"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the purchase"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a purchase confirmation is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the coin balance displayed in the shop is updated"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Study Assistant returns an AI response to first question",
+    "description": "Verifies an authenticated user can send a chat question and see an AI response appear in the conversation.",
+    "category": "AI Study Assistant",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation to open the study assistant"
+      },
+      {
+        "type": "action",
+        "description": "Fill a study question into the chat input"
+      },
+      {
+        "type": "action",
+        "description": "Send the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an AI response message is displayed in the chat"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Study Assistant follow-up stays in same conversation context in UI",
+    "description": "Verifies a user can ask a follow-up question after an initial response and see the conversation continue with a new AI follow-up response.",
+    "category": "AI Study Assistant",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation to open the study assistant"
+      },
+      {
+        "type": "action",
+        "description": "Fill a study question into the chat input"
+      },
+      {
+        "type": "action",
+        "description": "Send the message"
+      },
+      {
+        "type": "action",
+        "description": "Wait for an AI response to appear"
+      },
+      {
+        "type": "action",
+        "description": "Fill a follow-up question into the chat input"
+      },
+      {
+        "type": "action",
+        "description": "Send the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the chat shows both the earlier exchange and a new AI follow-up response"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Insufficient balance blocks purchase of expensive item",
+    "description": "Verifies a learner cannot complete a purchase when an item's cost exceeds their coin balance and an insufficient balance error is shown.",
+    "category": "Coin Shop",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the coin shop"
+      },
+      {
+        "type": "action",
+        "description": "Select a shop item that costs more than the currently displayed coin balance"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to confirm the purchase"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an insufficient balance error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the coin balance displayed in the shop is unchanged"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC009",
+    "title": "Shop items list is viewable for browsing",
+    "description": "Verifies a learner can browse the coin shop and sees available items to purchase.",
+    "category": "Coin Shop",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the coin shop"
+      },
+      {
+        "type": "action",
+        "description": "Scroll through the shop items list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify multiple shop items are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current coin balance is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC010",
+    "title": "Dashboard chart interaction updates selected metric",
+    "description": "Verifies a user can inspect a specific chart or metric on the profile dashboard and the displayed statistic/trend updates accordingly.",
+    "category": "User Dashboard (Profile)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Interact with a specific chart or metric selector on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard displays an updated statistic or trend for the selected metric"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC011",
+    "title": "Coin balance persists after navigating away and back to shop",
+    "description": "Verifies the coin balance shown in the coin shop remains consistent after navigating to another page and returning.",
+    "category": "Coin Shop",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the coin shop"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the profile dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the coin shop"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current coin balance is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify shop items are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC012",
+    "title": "Verify Email page shows verification instructions state",
+    "description": "Verifies the email verification page renders a verification state or instructions suitable for completing verification.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /verify-email"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify email verification instructions or status are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC013",
+    "title": "Canceling purchase leaves balance unchanged",
+    "description": "Verifies a learner can back out of a purchase confirmation and no coins are deducted.",
+    "category": "Coin Shop",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the coin shop"
+      },
+      {
+        "type": "action",
+        "description": "Select any shop item to buy to open the purchase confirmation"
+      },
+      {
+        "type": "action",
+        "description": "Cancel or close the purchase confirmation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the purchase confirmation is no longer visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the coin balance displayed in the shop is unchanged"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC014",
+    "title": "Invalid credentials show login error",
+    "description": "Verifies logging in with invalid credentials shows an error and the user remains unable to access the dashboard.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with invalid-user@example.com"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with wrong-password-123"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an authentication error is visible"
+      }
+    ],
+    "priority": "Low"
+  }
+]

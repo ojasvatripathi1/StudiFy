@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudiFy – AI-Powered Gamified Learning | MCA Final Year Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* ── Vibrant Electric Palette ── */
+      --purple:    #7c3aed;
+      --purple-md: #8b5cf6;
+      --purple-lt: #c4b5fd;
+      --indigo:    #4f46e5;
+      --cyan:      #06b6d4;
+      --cyan-lt:   #22d3ee;
+      --pink:      #f43f5e;
+      --coral:     #fb7185;
+      --amber:     #f59e0b;
+      --amber-lt:  #fbbf24;
+      --yellow:    #eab308;
+      --yellow-lt: #fde047;
+      --yellow-glow:#facc15;
+      --green:     #10b981;
+      --green-lt:  #34d399;
+      --lime:      #84cc16;
+      --orange:    #f97316;
+      --red:       #ef4444;
+
+      /* Fun surfaces */
+      --bg:       #fdf4ff;
+      --surface:  #ffffff;
+      --surface-2:#f5f0ff;
+      --border:   rgba(139,92,246,.15);
+      --border-md:rgba(139,92,246,.3);
+
+      /* Text */
+      --text:   #1e0a3c;
+      --text-2: #5b21b6;
+      --muted:  #6d28d9;
+      --muted-lt:#a78bfa;
+
+      --slide-w: 1280px;
+      --slide-h: 720px;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fdf4ff 0%, #ede9fe 25%, #dbeafe 50%, #fce7f3 75%, #fef3c7 100%);
+      background-size: 400% 400%;
+      animation: bgShift 12s ease infinite;
+      font-family: 'Nunito', sans-serif;
+    }
+    @keyframes bgShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ─── Deck ─────────────────────────────────────────── */
+    #deck {
+      width: var(--slide-w);
+      height: var(--slide-h);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(var(--scale, 1));
+      transform-origin: center center;
+    }
+
+    /* ─── Slide base ─────────────────────────────────── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, #fefcff 0%, #f5f0ff 60%, #fdf2fb 100%);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .45s cubic-bezier(.34,1.56,.64,1), transform .45s cubic-bezier(.34,1.56,.64,1);
+      transform: scale(.96) translateY(10px);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Left accent stripe — rainbow */
+    .slide::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 7px;
+      background: linear-gradient(180deg,
+        #f43f5e 0%,
+        #f97316 18%,
+        #eab308 36%,
+        #10b981 54%,
+        #06b6d4 72%,
+        #8b5cf6 90%);
+      z-index: 5;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Decorative blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      animation: blobDrift 8s ease-in-out infinite alternate;
+    }
+
+    .blob:nth-child(2) {
+      animation-delay: -3s;
+      animation-duration: 11s;
+    }
+
+    .blob:nth-child(3) {
+      animation-delay: -6s;
+      animation-duration: 9s;
+    }
+
+    @keyframes blobDrift {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(18px, 22px) scale(1.06);
+      }
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -400px 0;
+      }
+
+      100% {
+        background-position: 400px 0;
+      }
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(109, 40, 217, .18);
+      }
+
+      50% {
+        box-shadow: 0 0 24px 6px rgba(109, 40, 217, .28);
+      }
+    }
+
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: scale(.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes bounceIn {
+      0%   { opacity:0; transform: scale(.6) translateY(20px); }
+      60%  { opacity:1; transform: scale(1.04) translateY(-4px); }
+      80%  { transform: scale(.97) translateY(2px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+    @keyframes wiggle {
+      0%,100% { transform: rotate(0deg); }
+      25%     { transform: rotate(-3deg); }
+      75%     { transform: rotate(3deg); }
+    }
+    @keyframes floatY {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-6px); }
+    }
+    .slide.active .card,
+    .slide.active .grad-card,
+    .slide.active .feat-card {
+      animation: bounceIn .55s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    .slide.active .card:nth-child(2) {
+      animation-delay: .07s;
+    }
+
+    .slide.active .card:nth-child(3) {
+      animation-delay: .14s;
+    }
+
+    .slide.active .card:nth-child(4) {
+      animation-delay: .21s;
+    }
+
+    .slide.active .card:nth-child(5) {
+      animation-delay: .28s;
+    }
+
+    .slide.active .card:nth-child(6) {
+      animation-delay: .35s;
+    }
+
+    /* Content wrapper */
+    .content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 44px 64px 40px 72px;
+    }
+
+    /* ─── Slide header ───────────────────────────────── */
+    .slide-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    /* ── Fun top confetti bar ── */
+    .fun-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg,
+        #f43f5e, #f97316, #eab308, #10b981, #06b6d4, #8b5cf6, #f43f5e);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+      z-index: 10;
+    }
+
+    /* ─── Chip ───────────────────────────────────────── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(6,182,212,.12));
+      border: 2px solid rgba(139,92,246,.3);
+      color: var(--purple-md);
+      width: fit-content;
+      box-shadow: 0 2px 10px rgba(139,92,246,.15);
+      animation: floatY 3s ease-in-out infinite;
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── Section label ──────────────────────────────── */
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    /* ─── Headings ───────────────────────────────────── */
+    h1.hero-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 82px;
+      font-weight: 900;
+      line-height: 1.0;
+      background: linear-gradient(135deg, #f43f5e 0%, #f97316 25%, #eab308 50%, #10b981 75%, #8b5cf6 100%);
+      background-size: 200% 200%;
+      animation: bgShift 4s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+
+    h2.slide-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.18;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+
+    h2.slide-title .title-accent {
+      background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #8b5cf6);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── Card ───────────────────────────────────────── */
+    .card {
+      background: rgba(255, 255, 255, .88);
+      border: 2px solid rgba(139,92,246,.15);
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(139,92,246,.1), 0 1px 4px rgba(0,0,0,.05);
+      backdrop-filter: blur(12px);
+      transition: box-shadow .3s, border-color .3s, transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 36px rgba(139,92,246,.22), 0 4px 12px rgba(0,0,0,.07);
+      border-color: rgba(139,92,246,.4);
+      transform: translateY(-5px) rotate(0.5deg);
+    }
+
+    .card-strong {
+      background: linear-gradient(135deg, rgba(245,240,255,.95), rgba(240,249,255,.95));
+      border: 2px solid rgba(139,92,246,.2);
+      border-radius: 22px;
+      box-shadow: 0 6px 28px rgba(139,92,246,.12);
+    }
+
+    /* ─── Feature card ───────────────────────────────── */
+    .feat-card {
+      padding: 18px 20px;
+      border-radius: 14px;
+    }
+
+    .feat-icon {
+      font-size: 26px;
+      margin-bottom: 9px;
+    }
+
+    .feat-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .feat-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── Panel ──────────────────────────────────────── */
+    .panel {
+      border-radius: 14px;
+      padding: 16px 18px;
+      border: 1.5px solid rgba(109, 40, 217, .1);
+    }
+
+    /* ─── Tech pill ──────────────────────────────────── */
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(245,240,255,.9));
+      border: 1.5px solid rgba(139,92,246,.2);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(139,92,246,.1);
+      white-space: nowrap;
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+    }
+    .tech-pill:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 6px 16px rgba(139,92,246,.18);
+    }
+
+    .tech-emoji {
+      font-size: 15px;
+    }
+
+    /* ─── Grids ──────────────────────────────────────── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ─── Stat box ───────────────────────────────────── */
+    .stat-box {
+      padding: 18px 20px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* ─── Member card ────────────────────────────────── */
+    .member-card {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .member-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .member-roll {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .member-enroll {
+      font-size: 12px;
+      color: var(--purple-md);
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    /* ─── DB table ───────────────────────────────────── */
+    .db-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .db-table th {
+      text-align: left;
+      padding: 8px 11px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-bottom: 1.5px solid rgba(109, 40, 217, .1);
+    }
+
+    .db-table td {
+      padding: 8px 11px;
+      border-bottom: 1px solid rgba(109, 40, 217, .06);
+      color: var(--text);
+    }
+
+    .db-table td:first-child {
+      font-family: monospace;
+      color: var(--purple-md);
+      font-weight: 700;
+      font-size: 12.5px;
+    }
+
+    .db-table td:nth-child(2) {
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    /* ─── API row ────────────────────────────────────── */
+    .api-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 12px;
+    }
+
+    .api-method {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 7px;
+      letter-spacing: .06em;
+      flex-shrink: 0;
+    }
+
+    .api-path {
+      font-size: 13px;
+      font-family: monospace;
+      font-weight: 600;
+      color: var(--purple-md);
+    }
+
+    .api-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-left: auto;
+      text-align: right;
+    }
+
+    /* ─── Flow step ──────────────────────────────────── */
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+    }
+
+    .flow-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .flow-text {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .flow-arrow {
+      color: var(--muted-lt);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* ─── Highlight text ─────────────────────────────── */
+    .hi {
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    .hi-amber {
+      background: linear-gradient(90deg, #f97316, #f43f5e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    .hi-green {
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    .hi-yellow {
+      background: linear-gradient(90deg, #eab308, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    /* Shimmer loading bar */
+    .shimmer-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, rgba(109, 40, 217, .15) 25%, rgba(109, 40, 217, .4) 50%, rgba(109, 40, 217, .15) 75%);
+      background-size: 400px 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    /* Analytics insight widget */
+    .insight-widget {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .75);
+      border: 1.5px solid rgba(109, 40, 217, .1);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 12px rgba(109, 40, 217, .07);
+    }
+
+    .insight-icon {
+      font-size: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .insight-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .insight-lbl {
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .insight-trend {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .trend-up {
+      background: rgba(5, 150, 105, .1);
+      color: var(--green);
+    }
+
+    .trend-down {
+      background: rgba(220, 38, 38, .09);
+      color: var(--red);
+    }
+
+    .trend-neu {
+      background: rgba(202, 138, 4, .1);
+      color: var(--yellow);
+    }
+
+    /* ─── Divider ────────────────────────────────────── */
+    .divider {
+      width: 56px;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #10b981, #8b5cf6);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    /* ─── Corner slide number ────────────────────────── */
+    .corner-num {
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted-lt);
+      font-family: 'Space Grotesk', sans-serif;
+      z-index: 20;
+    }
+
+    /* ─── Gradient border card ───────────────────────── */
+    .grad-card {
+      background: rgba(255,255,255,.9);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 18px rgba(139,92,246,.1);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+
+    .grad-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 2px;
+      background: linear-gradient(135deg, #f43f5e, #f97316, #eab308, #10b981, #8b5cf6);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ─── Hero slide specifics ───────────────────────── */
+    #s1 .hero-sub {
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      color: #4c1d95;
+      margin-top: 14px;
+      max-width: 640px;
+      line-height: 1.75;
+      font-weight: 600;
+    }
+
+    #s1 .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    #s1 .hero-tag strong {
+      color: var(--text);
+    }
+
+    #s1 .watermark {
+      position: absolute;
+      right: 58px;
+      bottom: 44px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 148px;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, #f43f5e 0%, #eab308 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: .08;
+      letter-spacing: -6px;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Top stripe */
+    #s1 .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg,
+        #f43f5e, #f97316, #eab308, #10b981, #06b6d4, #8b5cf6, #f43f5e);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+
+    /* ─── Progress bar ───────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      z-index: 9999;
+      background: linear-gradient(90deg,
+        #f43f5e, #f97316, #eab308, #10b981, #06b6d4, #8b5cf6);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+      transition: width .35s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 0 14px rgba(139,92,246,.6);
+    }
+
+    /* ─── Side navigation arrows ─────────────────────── */
+    .side-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, #f43f5e, #f97316, #eab308);
+      background-size: 200% 200%;
+      animation: bgShift 3s ease infinite;
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(249,115,22,.45), 0 2px 8px rgba(0,0,0,.15);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+      z-index: 9999;
+      user-select: none;
+    }
+
+    .side-btn:hover:not(:disabled) {
+      transform: translateY(-50%) scale(1.18) rotate(-3deg);
+      box-shadow: 0 12px 36px rgba(249,115,22,.55), 0 4px 12px rgba(0,0,0,.2);
+    }
+
+    .side-btn:active:not(:disabled) {
+      transform: translateY(-50%) scale(0.96);
+    }
+
+    .side-btn:disabled {
+      opacity: .28;
+      cursor: not-allowed;
+    }
+
+    #btn-prev {
+      left: 18px;
+    }
+
+    #btn-next {
+      right: 18px;
+    }
+
+    /* ─── Bottom nav bar ─────────────────────────────── */
+    #nav {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 9998;
+      background: rgba(255,255,255,.9);
+      border: 2px solid rgba(139,92,246,.25);
+      backdrop-filter: blur(20px);
+      border-radius: 999px;
+      padding: 10px 24px;
+      box-shadow: 0 8px 32px rgba(139,92,246,.18),
+                  0 0 0 6px rgba(139,92,246,.06);
+    }
+
+    #slide-counter {
+      font-size: 13px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      min-width: 56px;
+      text-align: center;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    #dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(139,92,246,.25), rgba(6,182,212,.25));
+      cursor: pointer;
+      transition: all .3s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .dot.on {
+      width: 26px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #f43f5e, #8b5cf6);
+      box-shadow: 0 0 8px rgba(139,92,246,.4);
+    }
+
+    .key-hint {
+      font-size: 11px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      color: var(--purple-md);
+      letter-spacing: .04em;
+      opacity: .65;
+    }
+
+    /* Responsive scale */
+    @media (max-width:1400px) {
+      :root {
+        --slide-w: 100vw;
+        --slide-h: 56.25vw;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- Side navigation buttons -->
+  <button class="side-btn" id="btn-prev" onclick="goto(current-1)" disabled
+    title="Previous slide (← Arrow)">&#8249;</button>
+  <button class="side-btn" id="btn-next" onclick="goto(current+1)" title="Next slide (→ Arrow)">&#8250;</button>
+
+  <div id="deck">
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 1 · HERO
+═══════════════════════════════════════════════════════ -->
+    <div class="slide active" id="s1">
+      <div class="top-bar"></div>
+      <div class="blob"
+        style="width:520px;height:520px;background:radial-gradient(circle,rgba(109,40,217,.13) 0%,transparent 70%);top:-160px;left:-100px;">
+      </div>
+      <div class="blob"
+        style="width:400px;height:400px;background:radial-gradient(circle,rgba(8,145,178,.11) 0%,transparent 70%);bottom:-100px;right:90px;">
+      </div>
+
+      <div class="content" style="justify-content:center;">
+        <div class="chip" style="margin-bottom:22px;">
+          <div class="chip-dot" style="background:var(--purple);"></div>
+          MCA Final Year Major Project · 2025–26
+        </div>
+
+        <h1 class="hero-title">Studi<span
+            style="background:linear-gradient(90deg,var(--cyan),var(--purple-lt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Fy</span>
+        </h1>
+        <div class="divider" style="margin-top:16px;"></div>
+
+        <p class="hero-sub">An <strong style="color:var(--text);font-weight:800;">AI-Powered Gamified Learning
+            Assistant</strong> that transforms studying into an addictive, rewarding experience with intelligent
+          tutoring, auto-generated quizzes, and real-time analytics.</p>
+
+        <div style="margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;">
+          <div class="hero-tag">🏫 <strong>G.L.A. University, Mathura</strong></div>
+          <div class="hero-tag">📅 <strong>Batch - 2024–26</strong></div>
+          <div class="hero-tag">🎓 <strong>MCA · Final Year (4<sup>th</sup> Sem)</strong></div>
+        </div>
+
+        <div style="margin-top:30px;display:flex;gap:16px;">
+          <div class="card" style="padding:18px 22px;flex:1;">
+            <div class="sec-label">Project Supervisor</div>
+            <div style="font-size:17px;font-weight:800;color:var(--purple-md);margin-top:6px;">Asst. Prof. Ms. Deepti
+              Gautam</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:3px;">Department of Computer Engineering &
+              Applications</div>
+          </div>
+          <div class="card" style="padding:18px 22px;flex:2;">
+            <div class="sec-label">Project Team</div>
+            <div style="display:flex;gap:18px;margin-top:8px;flex-wrap:wrap;align-items:center;">
+              <span style="font-size:13.5px;font-weight:600;color:var(--text);">Anubhav Andhiwal <span
+                  style="color:var(--muted)">(07)</span></span>
+              <span style="font-size:13.5px;font-weight:600;color:var(--text);">Anurag Rajput <span
+                  style="color:var(--muted)">(08)</span></span>
+              <span style="font-size:13.5px;font-weight:600;color:var(--text);">Gaurav Sharma <span
+                  style="color:var(--muted)">(16)</span></span>
+              <span style="font-size:14px;font-weight:800;color:var(--purple-md);">Ojasva Tripathi <span
+                  style="color:var(--muted);font-weight:600;">(39)</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="watermark">S</div>
+      <span class="corner-num">① / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 2 · PROBLEM STATEMENT
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s2">
+      <div class="blob"
+        style="width:440px;height:440px;background:radial-gradient(circle,rgba(220,38,38,.09),transparent 70%);top:-100px;right:-100px;">
+      </div>
+      <div class="blob"
+        style="width:360px;height:360px;background:radial-gradient(circle,rgba(109,40,217,.08),transparent 70%);bottom:-70px;left:-70px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip" style="border-color:rgba(220,38,38,.2);background:rgba(220,38,38,.07);color:var(--red);">
+            <div class="chip-dot" style="background:var(--red);"></div>Problem Statement
+          </div>
+        </div>
+        <h2 class="slide-title">Why does conventional studying <span class="title-accent">fail?</span></h2>
+
+        <div class="grid-2" style="flex:1;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:13px;">
+            <div class="card feat-card">
+              <div class="feat-icon">😴</div>
+              <div class="feat-title">Zero Engagement</div>
+              <div class="feat-desc">Textbook reading offers no interactivity, feedback, or dopamine rewards — leading
+                to passive, low-retention studying.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">📉</div>
+              <div class="feat-title">No Progress Visibility</div>
+              <div class="feat-desc">Students cannot measure improvement objectively. Absence of analytics makes blind
+                spots invisible.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">🤖</div>
+              <div class="feat-title">Generic Content</div>
+              <div class="feat-desc">One-size-fits-all quizzes fail to adapt to individual pace, topics, or knowledge
+                gaps.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:13px;">
+            <div class="card feat-card">
+              <div class="feat-icon">⏰</div>
+              <div class="feat-title">No Accountability</div>
+              <div class="feat-desc">Without reminders, streak systems, or competition, students lack the consistency to
+                build strong habits.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">🏝️</div>
+              <div class="feat-title">Isolation</div>
+              <div class="feat-desc">No community, leaderboard, or peer benchmark to motivate competitive growth.</div>
+            </div>
+            <div class="card-strong" style="padding:20px;border-radius:16px;flex:1;">
+              <div
+                style="font-size:13px;font-weight:700;color:var(--purple-md);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">
+                ✅ StudiFy addresses all of these</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="font-size:13px;color:var(--text);display:flex;align-items:center;gap:9px;"><span
+                    style="color:var(--green);">●</span> AI-personalised quizzes &amp; study paths</div>
+                <div style="font-size:13px;color:var(--text);display:flex;align-items:center;gap:9px;"><span
+                    style="color:var(--purple-md);">●</span> Gamified streaks, coins &amp; leaderboards</div>
+                <div style="font-size:13px;color:var(--text);display:flex;align-items:center;gap:9px;"><span
+                    style="color:var(--cyan);">●</span> Real-time productivity analytics</div>
+                <div style="font-size:13px;color:var(--text);display:flex;align-items:center;gap:9px;"><span
+                    style="color:var(--amber);">●</span> Always-available AI tutor chatbot</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">② / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 3 · OVERVIEW
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s3">
+      <div class="blob"
+        style="width:500px;height:500px;background:radial-gradient(circle,rgba(109,40,217,.1),transparent 70%);top:-140px;right:-140px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip">
+            <div class="chip-dot" style="background:var(--purple);"></div>Overview
+          </div>
+        </div>
+        <h2 class="slide-title">What is <span class="title-accent">StudiFy?</span></h2>
+
+        <div style="display:flex;gap:22px;flex:1;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+            <div class="card-strong" style="padding:26px;border-radius:18px;flex:1;">
+              <div style="font-size:14.5px;color:var(--muted);line-height:1.78;">
+                StudiFy is a <strong style="color:var(--text);font-weight:800;">full-stack, AI-driven educational
+                  platform</strong> built as an MCA Final Year Project. It fuses <span class="hi">Generative AI</span>
+                with <span class="hi-amber">Behavioural Gamification</span> to transform passive studying into an
+                engaging habit loop.
+                <br><br>
+                Inspired by the <strong style="color:var(--purple-md);">Octalysis Framework</strong>, it targets 4 human
+                drives:
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;margin-top:18px;">
+                <div
+                  style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(109,40,217,.05);border:1.5px solid rgba(109,40,217,.1);">
+                  <div style="width:9px;height:9px;border-radius:50%;background:var(--purple-lt);flex-shrink:0;"></div>
+                  <div style="font-size:13px;color:var(--text);"><strong>Development &amp; Accomplishment</strong> —
+                    Levels, coins, badges</div>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(8,145,178,.05);border:1.5px solid rgba(8,145,178,.1);">
+                  <div style="width:9px;height:9px;border-radius:50%;background:var(--cyan);flex-shrink:0;"></div>
+                  <div style="font-size:13px;color:var(--text);"><strong>Empowerment of Creativity</strong> —
+                    Personalised AI study paths</div>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(219,39,119,.05);border:1.5px solid rgba(219,39,119,.1);">
+                  <div style="width:9px;height:9px;border-radius:50%;background:var(--pink);flex-shrink:0;"></div>
+                  <div style="font-size:13px;color:var(--text);"><strong>Social Influence</strong> — Competitive
+                    leaderboards</div>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(217,119,6,.05);border:1.5px solid rgba(217,119,6,.1);">
+                  <div style="width:9px;height:9px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>
+                  <div style="font-size:13px;color:var(--text);"><strong>Loss &amp; Avoidance</strong> — Streak
+                    maintenance &amp; daily puzzles</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="width:240px;display:flex;flex-direction:column;gap:12px;">
+            <div class="card stat-box">
+              <div class="stat-num"
+                style="background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                Next.js 15</div>
+              <div class="stat-label">Core Framework</div>
+            </div>
+            <div class="card stat-box">
+              <div class="stat-num"
+                style="background:linear-gradient(135deg,var(--amber),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                Firebase</div>
+              <div class="stat-label">Backend &amp; Auth</div>
+            </div>
+            <div class="card stat-box">
+              <div class="stat-num"
+                style="background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                3 AI</div>
+              <div class="stat-label">Providers Integrated</div>
+            </div>
+            <div class="card stat-box">
+              <div class="stat-num"
+                style="background:linear-gradient(135deg,var(--purple-lt),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                9+</div>
+              <div class="stat-label">Core Feature Modules</div>
+            </div>
+            <div class="card stat-box">
+              <div class="stat-num"
+                style="background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                6</div>
+              <div class="stat-label">REST API Endpoints</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">③ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 4 · FEATURES 1 — AI & GAMIFICATION
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s4">
+      <div class="blob"
+        style="width:460px;height:460px;background:radial-gradient(circle,rgba(8,145,178,.09),transparent 70%);bottom:-100px;right:-100px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip" style="border-color:rgba(8,145,178,.22);background:rgba(8,145,178,.07);color:var(--cyan);">
+            <div class="chip-dot" style="background:var(--cyan);"></div>Core Features · 1 of 2
+          </div>
+        </div>
+        <h2 class="slide-title">AI Intelligence &amp; <span class="title-accent">Gamification Engine</span></h2>
+
+        <div class="grid-2" style="flex:1;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div
+              style="font-size:12px;font-weight:800;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;padding:0 2px;">
+              🧠 AI Study Intelligence</div>
+            <div class="grad-card">
+              <div class="feat-icon">💬</div>
+              <div class="feat-title">AI Study Assistant Chatbot</div>
+              <div class="feat-desc">Powered by Groq (Llama 3/Mixtral), Google Gemini, or local Ollama. Streams answers
+                via SSE. Stays grounded in uploaded documents, guides without giving away answers.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">📝</div>
+              <div class="feat-title">Smart Quiz Generator</div>
+              <div class="feat-desc">Generates 5-question quizzes from uploaded PDFs or images. A contextual hint system
+                via <code
+                  style="font-size:11px;background:rgba(109,40,217,.08);padding:2px 6px;border-radius:4px;color:var(--purple-md);">/api/ai/hint</code>
+                helps without revealing answers.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">🔍</div>
+              <div class="feat-title">AI Study Insights</div>
+              <div class="feat-desc">Analyses focus levels, study duration, and distractions to deliver personalised
+                recommendations and peak performance predictions.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div
+              style="font-size:12px;font-weight:800;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;padding:0 2px;">
+              🎮 Gamification Loop</div>
+            <div class="grad-card">
+              <div class="feat-icon">🧩</div>
+              <div class="feat-title">Daily Puzzle Gated Rewards</div>
+              <div class="feat-desc">Earn coins only by solving a rotating Daily Puzzle:<br><span
+                  style="color:var(--purple-md);font-weight:600;">Memory Game</span> · <span
+                  style="color:var(--amber);font-weight:600;">Math Challenge</span> · <span
+                  style="color:var(--cyan);font-weight:600;">Word Scramble</span> — rotates by day of week.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">🔥</div>
+              <div class="feat-title">Streak &amp; Coin Economy</div>
+              <div class="feat-desc">Base: <strong style="color:var(--purple-md);">100 coins</strong>. Streak bonus:
+                <code
+                  style="font-size:11px;background:rgba(217,119,6,.1);color:var(--amber);padding:2px 6px;border-radius:4px;">100 + (streak × 5)</code>
+                coins. Resets on missed day.
+              </div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">🏆</div>
+              <div class="feat-title">Leaderboard, Badges &amp; Coin Shop</div>
+              <div class="feat-desc">Global ranking by coins; badge milestones (Quiz Master, 7-Day Streak). Shop sells
+                themes, avatars, boosters tracked in <code
+                  style="font-size:11px;background:rgba(109,40,217,.08);padding:2px 6px;border-radius:4px;color:var(--purple-md);">userInventory</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">④ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 5 · FEATURES 2 — PRODUCTIVITY & ANALYTICS
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s5">
+      <div class="blob"
+        style="width:460px;height:460px;background:radial-gradient(circle,rgba(5,150,105,.09),transparent 70%);top:-100px;right:-80px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip" style="border-color:rgba(5,150,105,.22);background:rgba(5,150,105,.07);color:var(--green);">
+            <div class="chip-dot" style="background:var(--green);"></div>Core Features · 2 of 2
+          </div>
+        </div>
+        <h2 class="slide-title">Productivity, Analytics &amp; <span class="title-accent">Document Processing</span></h2>
+
+        <div class="grid-3" style="flex:1;gap:14px;">
+          <div class="card feat-card">
+            <div class="feat-icon">⏱️</div>
+            <div class="feat-title">Focused Study Timer</div>
+            <div class="feat-desc">Pomodoro-style session tracking. Users pick a subject &amp; goal. Timer logs duration
+              automatically. Focus rated post-session.</div>
+          </div>
+          <div class="card feat-card">
+            <div class="feat-icon">📊</div>
+            <div class="feat-title">Growth Story Analytics</div>
+            <div class="feat-desc">Powered by <strong style="color:var(--purple-md);">Recharts</strong>:<br>Growth
+              Velocity · Engagement Spectrum · Revenue Ecosystem pie chart.</div>
+          </div>
+          <div class="card feat-card">
+            <div class="feat-icon">📁</div>
+            <div class="feat-title">File Processing &amp; OCR</div>
+            <div class="feat-desc">PDF, TXT, Images supported. <strong
+                style="color:var(--purple-md);">Tesseract.js</strong> OCR client-side. <strong
+                style="color:var(--purple-md);">pdfjs-dist</strong> extracts text for AI.</div>
+          </div>
+          <div class="card feat-card">
+            <div class="feat-icon">☁️</div>
+            <div class="feat-title">Cloud Image Storage</div>
+            <div class="feat-desc"><strong style="color:var(--purple-md);">Cloudinary</strong> handles upload,
+              optimisation, and CDN delivery of avatars and profile images.</div>
+          </div>
+          <div class="card feat-card">
+            <div class="feat-icon">📅</div>
+            <div class="feat-title">Daily Quiz System</div>
+            <div class="feat-desc">A unique quiz per day via <code
+                style="font-size:11px;background:rgba(109,40,217,.08);color:var(--purple-md);padding:2px 5px;border-radius:4px;">/api/daily-quiz</code>.
+              Coins awarded based on performance score.</div>
+          </div>
+          <div class="card feat-card">
+            <div class="feat-icon">📧</div>
+            <div class="feat-title">Transactional Email</div>
+            <div class="feat-desc"><strong style="color:var(--purple-md);">SendGrid</strong> is integrated for automated
+              email delivery — email verification on signup.</div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑤ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 6 · TECH STACK
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s6">
+      <div class="blob"
+        style="width:500px;height:500px;background:radial-gradient(circle,rgba(109,40,217,.09),transparent 70%);top:-160px;left:-160px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip">
+            <div class="chip-dot" style="background:var(--purple);"></div>Technology Stack
+          </div>
+        </div>
+        <h2 class="slide-title">Libraries &amp; Modules <span class="title-accent">Powering StudiFy</span></h2>
+
+        <div style="display:flex;gap:20px;flex:1;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:9px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--purple-md);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;">
+              Frontend &amp; Framework</div>
+            <div class="tech-pill"><span class="tech-emoji">⚛️</span> Next.js 15 (App Router)</div>
+            <div class="tech-pill"><span class="tech-emoji">🔷</span> React 18</div>
+            <div class="tech-pill"><span class="tech-emoji">📘</span> TypeScript</div>
+            <div class="tech-pill"><span class="tech-emoji">🎨</span> Tailwind CSS</div>
+            <div class="tech-pill"><span class="tech-emoji">✨</span> Framer Motion</div>
+            <div class="tech-pill"><span class="tech-emoji">🧱</span> Radix UI Primitives</div>
+            <div class="tech-pill"><span class="tech-emoji">🔣</span> Lucide React Icons</div>
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase;margin-top:12px;margin-bottom:3px;">
+              UI Utilities</div>
+            <div class="tech-pill"><span class="tech-emoji">🔀</span> Tailwind Merge / CLSX / CVA</div>
+            <div class="tech-pill"><span class="tech-emoji">📋</span> React Hook Form + Zod</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:9px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;">
+              Backend &amp; Database</div>
+            <div class="tech-pill"><span class="tech-emoji">🔥</span> Firebase Auth</div>
+            <div class="tech-pill"><span class="tech-emoji">🗄️</span> Cloud Firestore (NoSQL)</div>
+            <div class="tech-pill"><span class="tech-emoji">🔑</span> Firebase Admin SDK</div>
+            <div class="tech-pill" style="border-color:rgba(0,0,0,.18);color:#000;"><span class="tech-emoji">▲</span>
+              Vercel Deployment</div>
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-top:12px;margin-bottom:3px;">
+              AI &amp; Machine Learning</div>
+            <div class="tech-pill"><span class="tech-emoji">🤖</span> Google GenKit + Gemini Pro</div>
+            <div class="tech-pill"><span class="tech-emoji">⚡</span> Groq (Llama 3 / Mixtral)</div>
+            <div class="tech-pill"><span class="tech-emoji">🦙</span> Ollama (Local LLM — Llama 3)</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:9px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--pink);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;">
+              Document &amp; Image Processing</div>
+            <div class="tech-pill"><span class="tech-emoji">📄</span> pdfjs-dist / react-pdf</div>
+            <div class="tech-pill"><span class="tech-emoji">🔠</span> Tesseract.js (OCR)</div>
+            <div class="tech-pill"><span class="tech-emoji">📸</span> Cloudinary CDN</div>
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase;margin-top:12px;margin-bottom:3px;">
+              Data, Email &amp; Utilities</div>
+            <div class="tech-pill"><span class="tech-emoji">📈</span> Recharts</div>
+            <div class="tech-pill"><span class="tech-emoji">📧</span> SendGrid Mail</div>
+            <div class="tech-pill"><span class="tech-emoji">📅</span> date-fns / react-day-picker</div>
+            <div class="tech-pill"><span class="tech-emoji">🐙</span> Git / Firebase CLI</div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑥ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 7 · SYSTEM ARCHITECTURE
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s7">
+      <div class="blob"
+        style="width:400px;height:400px;background:radial-gradient(circle,rgba(67,56,202,.09),transparent 70%);bottom:-100px;left:-80px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip"
+            style="border-color:rgba(67,56,202,.22);background:rgba(67,56,202,.07);color:var(--indigo);">
+            <div class="chip-dot" style="background:var(--indigo);"></div>Architecture
+          </div>
+        </div>
+        <h2 class="slide-title"><span class="title-accent">3-Layer</span> System Architecture</h2>
+
+        <div style="display:flex;gap:20px;flex:1;">
+          <div style="flex:2;display:flex;flex-direction:column;gap:12px;justify-content:center;">
+            <!-- Client Layer -->
+            <div
+              style="padding:16px 18px;border-radius:14px;border:2px solid rgba(109,40,217,.2);background:rgba(109,40,217,.04);">
+              <div
+                style="font-size:11.5px;font-weight:800;color:var(--purple-md);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;">
+                🖥️ Client Layer (Browser)</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">Next.js App Router</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">React Components</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">Framer Motion</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">AuthContext</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">ThemeContext</span>
+              </div>
+            </div>
+
+            <div style="text-align:center;font-size:20px;color:var(--muted-lt);">↕</div>
+
+            <!-- API Layer -->
+            <div
+              style="padding:16px 18px;border-radius:14px;border:2px solid rgba(8,145,178,.2);background:rgba(8,145,178,.04);">
+              <div
+                style="font-size:11.5px;font-weight:800;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;">
+                🔌 API Layer (Next.js Server)</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">/api/daily-quiz</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">/api/generate-quiz</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">/api/ollama (SSE)</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">/api/extract-text</span>
+                <span class="tech-pill" style="font-size:11.5px;padding:5px 10px;">/api/ai/hint</span>
+              </div>
+            </div>
+
+            <div style="text-align:center;font-size:20px;color:var(--muted-lt);">↕</div>
+
+            <!-- Services Layer -->
+            <div style="display:flex;gap:12px;">
+              <div
+                style="flex:1;padding:15px 16px;border-radius:13px;border:2px solid rgba(217,119,6,.2);background:rgba(217,119,6,.04);">
+                <div
+                  style="font-size:11px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">
+                  🔥 Firebase BaaS</div>
+                <div style="font-size:13px;color:var(--muted);line-height:1.6;">Auth · Firestore<br>Admin SDK · Hosting
+                </div>
+              </div>
+              <div
+                style="flex:1;padding:15px 16px;border-radius:13px;border:2px solid rgba(5,150,105,.2);background:rgba(5,150,105,.04);">
+                <div
+                  style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">
+                  🤖 AI Services</div>
+                <div style="font-size:13px;color:var(--muted);line-height:1.6;">Groq · Gemini<br>Ollama (Local)</div>
+              </div>
+              <div
+                style="flex:1;padding:15px 16px;border-radius:13px;border:2px solid rgba(219,39,119,.2);background:rgba(219,39,119,.04);">
+                <div
+                  style="font-size:11px;font-weight:800;color:var(--pink);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">
+                  ☁️ 3rd Party</div>
+                <div style="font-size:13px;color:var(--muted);line-height:1.6;">Cloudinary<br>SendGrid</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">
+              State Management</div>
+            <div class="card feat-card">
+              <div class="feat-title">🔐 AuthContext</div>
+              <div class="feat-desc">Manages user session, coins, streak and login state globally.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-title">🎨 ThemeContext</div>
+              <div class="feat-desc">Controls the active profile theme purchased from the Coin Shop.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-title">🔄 Real-time Listeners</div>
+              <div class="feat-desc">Firestore <code
+                  style="font-size:11px;background:rgba(109,40,217,.08);color:var(--purple-md);padding:2px 5px;border-radius:4px;">onSnapshot()</code>
+                drives live leaderboard &amp; balance.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-title">📡 Server-Sent Events</div>
+              <div class="feat-desc">Chatbot responses stream token-by-token for a real-time typing effect.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑦ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 8 · DATA FLOW DIAGRAM
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s8">
+      <div class="blob"
+        style="width:400px;height:400px;background:radial-gradient(circle,rgba(8,145,178,.09),transparent 70%);top:-70px;right:-70px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip" style="border-color:rgba(8,145,178,.22);background:rgba(8,145,178,.07);color:var(--cyan);">
+            <div class="chip-dot" style="background:var(--cyan);"></div>DFD · Level 1
+          </div>
+        </div>
+        <h2 class="slide-title"><span class="title-accent">Data Flow</span> Diagram</h2>
+
+        <div style="display:flex;gap:20px;flex:1;align-items:center;">
+          <div style="flex:2;height:100%;display:flex;flex-direction:column;gap:12px;justify-content:center;">
+            <!-- Row 1 -->
+            <div style="display:flex;align-items:center;gap:16px;justify-content:center;">
+              <div
+                style="padding:13px 22px;border-radius:13px;border:2.5px solid var(--purple-md);background:rgba(109,40,217,.07);text-align:center;min-width:100px;">
+                <div style="font-size:22px;">👤</div>
+                <div style="font-size:13px;font-weight:800;color:var(--purple-md);margin-top:3px;">User</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
+                <div style="font-size:11px;color:var(--muted);">Credentials / Actions</div>
+                <div style="font-size:20px;color:var(--purple-lt);">⟺</div>
+                <div style="font-size:11px;color:var(--muted);">Data / Results</div>
+              </div>
+              <div
+                style="padding:13px 22px;border-radius:13px;border:2.5px solid var(--cyan);background:rgba(8,145,178,.07);text-align:center;min-width:120px;">
+                <div style="font-size:22px;">💻</div>
+                <div style="font-size:13px;font-weight:800;color:var(--cyan);margin-top:3px;">Next.js UI</div>
+              </div>
+            </div>
+            <!-- Arrows -->
+            <div style="display:flex;justify-content:center;gap:60px;">
+              <div style="text-align:center;font-size:11px;color:var(--muted);">Upload Material<br><span
+                  style="font-size:16px;color:var(--green);">↓</span></div>
+              <div style="text-align:center;font-size:11px;color:var(--muted);">Login / Data<br><span
+                  style="font-size:16px;color:var(--amber);">↓</span></div>
+              <div style="text-align:center;font-size:11px;color:var(--muted);">Puzzle Done<br><span
+                  style="font-size:16px;color:var(--pink);">↓</span></div>
+            </div>
+            <!-- Services -->
+            <div style="display:flex;gap:14px;justify-content:center;">
+              <div
+                style="padding:11px 14px;border-radius:12px;border:2px solid rgba(5,150,105,.3);background:rgba(5,150,105,.06);text-align:center;flex:1;max-width:170px;">
+                <div style="font-size:16px;">📄→🤖</div>
+                <div style="font-size:11.5px;font-weight:800;color:var(--green);margin-top:4px;">FileProcessor + AI
+                </div>
+                <div style="font-size:11px;color:var(--muted);">OCR → Quiz/Summary</div>
+              </div>
+              <div
+                style="padding:11px 14px;border-radius:12px;border:2px solid rgba(217,119,6,.3);background:rgba(217,119,6,.06);text-align:center;flex:1;max-width:170px;">
+                <div style="font-size:16px;">🔐</div>
+                <div style="font-size:11.5px;font-weight:800;color:var(--amber);margin-top:4px;">Firebase Auth</div>
+                <div style="font-size:11px;color:var(--muted);">Token → Session</div>
+              </div>
+              <div
+                style="padding:11px 14px;border-radius:12px;border:2px solid rgba(219,39,119,.3);background:rgba(219,39,119,.06);text-align:center;flex:1;max-width:170px;">
+                <div style="font-size:16px;">🔄</div>
+                <div style="font-size:11.5px;font-weight:800;color:var(--pink);margin-top:4px;">Batch Transaction</div>
+                <div style="font-size:11px;color:var(--muted);">Atomic Coin Update</div>
+              </div>
+            </div>
+            <!-- Arrow to Firestore -->
+            <div style="text-align:center;font-size:11px;color:var(--muted);">All data persists to<br><span
+                style="font-size:16px;color:var(--cyan);">↓</span></div>
+            <!-- Firestore -->
+            <div style="display:flex;justify-content:center;">
+              <div
+                style="padding:13px 32px;border-radius:14px;border:2.5px solid rgba(8,145,178,.4);background:rgba(8,145,178,.07);text-align:center;">
+                <div style="font-size:16px;">🗄️</div>
+                <div style="font-size:13px;font-weight:800;color:var(--cyan);margin-top:3px;">Cloud Firestore</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:3px;">Users · Sessions · Coins · Leaderboard ·
+                  Quizzes</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">
+              Data Flows</div>
+            <div class="card feat-card" style="border-left:3px solid var(--green);">
+              <div class="feat-title">📁 AI Analysis Flow</div>
+              <div class="feat-desc">Upload → OCR/PDF Extract → AI Engine → Quiz/Summary → UI</div>
+            </div>
+            <div class="card feat-card" style="border-left:3px solid var(--amber);">
+              <div class="feat-title">🔐 Auth Flow</div>
+              <div class="feat-desc">Credentials → Firebase Auth → JWT Token → AuthContext → Profile</div>
+            </div>
+            <div class="card feat-card" style="border-left:3px solid var(--pink);">
+              <div class="feat-title">🎮 Daily Bonus Flow</div>
+              <div class="feat-desc">Puzzle Win → Batch: Coins + Streak + Log (atomic write)</div>
+            </div>
+            <div class="card feat-card" style="border-left:3px solid var(--cyan);">
+              <div class="feat-title">📊 Analytics Flow</div>
+              <div class="feat-desc">Session End → Firestore → Aggregated → Recharts Chart</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑧ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 9 · ER DIAGRAM
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s9">
+      <div class="blob"
+        style="width:400px;height:400px;background:radial-gradient(circle,rgba(217,119,6,.09),transparent 70%);bottom:-100px;right:-80px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip" style="border-color:rgba(217,119,6,.22);background:rgba(217,119,6,.08);color:var(--amber);">
+            <div class="chip-dot" style="background:var(--amber);"></div>Database Design
+          </div>
+        </div>
+        <h2 class="slide-title">Entity–Relationship <span class="title-accent">Diagram</span></h2>
+
+
+        <div style="flex:1;display:flex;gap:18px;align-items:flex-start;">
+          <!-- SVG ER Diagram -->
+          <div style="flex:2;">
+            <svg viewBox="0 0 710 385" width="100%" height="100%" style="max-height:365px;"
+              xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arw" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#7c3aed" opacity=".7" />
+                </marker>
+                <marker id="arwA" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#d97706" opacity=".7" />
+                </marker>
+                <marker id="arwC" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#0891b2" opacity=".7" />
+                </marker>
+                <marker id="arwG" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#059669" opacity=".7" />
+                </marker>
+                <marker id="arwP" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#db2777" opacity=".7" />
+                </marker>
+              </defs>
+              <!-- USERS central -->
+              <rect x="262" y="145" width="186" height="108" rx="13" fill="rgba(109,40,217,.08)" stroke="#7c3aed"
+                stroke-width="2" />
+              <text x="355" y="167" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13"
+                font-weight="800" fill="#7c3aed">&#128100; users</text>
+              <line x1="272" y1="173" x2="438" y2="173" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,3"
+                opacity=".35" />
+              <text x="272" y="188" font-size="9.5" fill="#3730a3" font-family="Inter,sans-serif">uid (PK) · email ·
+                displayName</text>
+              <text x="272" y="202" font-size="9.5" fill="#3730a3" font-family="Inter,sans-serif">coins · loginStreak ·
+                rank</text>
+              <text x="272" y="216" font-size="9.5" fill="#3730a3" font-family="Inter,sans-serif">badges[ ] · level ·
+                lastLoginDate</text>
+              <text x="272" y="230" font-size="9.5" fill="#3730a3" font-family="Inter,sans-serif">quizStreaks{ } ·
+                profileTheme</text>
+              <!-- QUIZZES top-left -->
+              <rect x="18" y="24" width="170" height="92" rx="12" fill="rgba(8,145,178,.07)" stroke="#0891b2"
+                stroke-width="2" />
+              <text x="103" y="45" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12"
+                font-weight="800" fill="#0891b2">&#128221; quizzes</text>
+              <line x1="28" y1="52" x2="178" y2="52" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,3"
+                opacity=".35" />
+              <text x="28" y="67" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">id (PK) · uid (FK
+                &#8594; users)</text>
+              <text x="28" y="81" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">questions[ ] ·
+                subject</text>
+              <text x="28" y="95" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">difficulty · score ·
+                createdAt</text>
+              <text x="28" y="109" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">timeTaken ·
+                aiProvider</text>
+              <path d="M188,68 Q224,68 262,188" stroke="#0891b2" stroke-width="1.5" fill="none" opacity=".5"
+                marker-end="url(#arwC)" />
+              <text x="208" y="122" font-size="9" fill="#0891b2" font-family="Inter,sans-serif" font-weight="700">N :
+                1</text>
+              <!-- STUDY SESSIONS top-right -->
+              <rect x="522" y="24" width="172" height="92" rx="12" fill="rgba(5,150,105,.07)" stroke="#059669"
+                stroke-width="2" />
+              <text x="608" y="45" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11.5"
+                font-weight="800" fill="#059669">&#9201; studySessions</text>
+              <line x1="532" y1="52" x2="684" y2="52" stroke="#059669" stroke-width="1" stroke-dasharray="3,3"
+                opacity=".35" />
+              <text x="532" y="67" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">id (PK) · uid (FK
+                &#8594; users)</text>
+              <text x="532" y="81" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">subject · duration ·
+                goal</text>
+              <text x="532" y="95" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">focusLevel ·
+                startTime</text>
+              <text x="532" y="109" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">notes ·
+                distractions</text>
+              <path d="M522,68 Q486,68 448,188" stroke="#059669" stroke-width="1.5" fill="none" opacity=".5"
+                marker-end="url(#arwG)" />
+              <text x="490" y="122" font-size="9" fill="#059669" font-family="Inter,sans-serif" font-weight="700">N :
+                1</text>
+              <!-- TRANSACTIONS bottom-left -->
+              <rect x="18" y="280" width="170" height="92" rx="12" fill="rgba(217,119,6,.07)" stroke="#d97706"
+                stroke-width="2" />
+              <text x="103" y="300" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12"
+                font-weight="800" fill="#d97706">&#128176; transactions</text>
+              <line x1="28" y1="307" x2="178" y2="307" stroke="#d97706" stroke-width="1" stroke-dasharray="3,3"
+                opacity=".35" />
+              <text x="28" y="322" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">id (PK) · uid (FK
+                &#8594; users)</text>
+              <text x="28" y="336" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">amount · type</text>
+              <text x="28" y="350" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">"credit" |
+                "debit"</text>
+              <text x="28" y="364" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">category ·
+                timestamp</text>
+              <path d="M188,318 Q224,318 262,248" stroke="#d97706" stroke-width="1.5" fill="none" opacity=".5"
+                marker-end="url(#arwA)" />
+              <text x="208" y="290" font-size="9" fill="#d97706" font-family="Inter,sans-serif" font-weight="700">N :
+                1</text>
+              <!-- USER INVENTORY bottom-right -->
+              <rect x="520" y="280" width="172" height="100" rx="12" fill="rgba(219,39,119,.07)" stroke="#db2777"
+                stroke-width="2" stroke-dasharray="6,3" />
+              <text x="606" y="300" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11"
+                font-weight="800" fill="#db2777">&#128717; userInventory</text>
+              <text x="530" y="313" font-size="8.5" fill="#db2777" font-family="Inter,sans-serif"
+                font-style="italic">(sub-collection of users)</text>
+              <line x1="530" y1="318" x2="682" y2="318" stroke="#db2777" stroke-width="1" stroke-dasharray="3,3"
+                opacity=".35" />
+              <text x="530" y="333" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">itemId · uid (FK
+                &#8594; users)</text>
+              <text x="530" y="347" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">type: theme | avatar |
+                booster</text>
+              <text x="530" y="361" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">purchasedAt ·
+                coinsSpent</text>
+              <text x="530" y="375" font-size="9.5" fill="#1a1740" font-family="Inter,sans-serif">active ·
+                equippedAt</text>
+              <path d="M520,318 Q484,318 448,248" stroke="#db2777" stroke-width="1.5" fill="none" opacity=".5"
+                marker-end="url(#arwP)" />
+              <text x="490" y="290" font-size="9" fill="#db2777" font-family="Inter,sans-serif" font-weight="700">N :
+                1</text>
+              <!-- Legend -->
+              <text x="355" y="383" text-anchor="middle" font-size="8.5" fill="#9ca3af" font-family="Inter,sans-serif"
+                font-style="italic">Dashed = sub-collection · Arrows = FK reference · All IDs are Firestore document
+                IDs</text>
+            </svg>
+          </div>
+          <!-- Insight panel -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
+            <div
+              style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">
+              Entities &amp; Cardinality</div>
+            <div class="insight-widget">
+              <div class="insight-icon" style="background:rgba(109,40,217,.1);">&#128100;</div>
+              <div>
+                <div class="insight-val" style="color:var(--purple-md);">users</div>
+                <div class="insight-lbl">Root entity · Auth UID = PK</div>
+              </div>
+              <div class="insight-trend trend-up">Root</div>
+            </div>
+            <div class="insight-widget">
+              <div class="insight-icon" style="background:rgba(8,145,178,.1);">&#128221;</div>
+              <div>
+                <div class="insight-val" style="color:var(--cyan);">quizzes</div>
+                <div class="insight-lbl">N&#8594;1 · uid FK to users</div>
+              </div>
+              <div class="insight-trend trend-neu">N:1</div>
+            </div>
+            <div class="insight-widget">
+              <div class="insight-icon" style="background:rgba(5,150,105,.1);">&#9201;</div>
+              <div>
+                <div class="insight-val" style="color:var(--green);">studySessions</div>
+                <div class="insight-lbl">N&#8594;1 · uid FK to users</div>
+              </div>
+              <div class="insight-trend trend-neu">N:1</div>
+            </div>
+            <div class="insight-widget">
+              <div class="insight-icon" style="background:rgba(217,119,6,.1);">&#128176;</div>
+              <div>
+                <div class="insight-val" style="color:var(--amber);">transactions</div>
+                <div class="insight-lbl">Coin ledger · N:1 users</div>
+              </div>
+              <div class="insight-trend trend-neu">N:1</div>
+            </div>
+            <div class="insight-widget">
+              <div class="insight-icon" style="background:rgba(219,39,119,.1);">&#128717;</div>
+              <div>
+                <div class="insight-val" style="color:var(--pink);">userInventory</div>
+                <div class="insight-lbl">Sub-collection of users/{uid}</div>
+              </div>
+              <div class="insight-trend trend-down">Sub</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">&#9313; / 14</span>
+    </div>
+
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 10 · APPLICATION FLOW
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s10">
+      <div class="blob"
+        style="width:440px;height:440px;background:radial-gradient(circle,rgba(109,40,217,.09),transparent 70%);top:-100px;right:-100px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip">
+            <div class="chip-dot" style="background:var(--purple);"></div>App Flow
+          </div>
+        </div>
+        <h2 class="slide-title">User Journey &amp; <span class="title-accent">Application Flows</span></h2>
+
+        <div class="grid-2" style="flex:1;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--purple-md);text-transform:uppercase;letter-spacing:.08em;">
+              🚀 User Onboarding</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(109,40,217,.1);color:var(--purple-md);">1</div>
+              <div class="flow-text"><strong>Landing Page</strong> — Features &amp; value proposition</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(109,40,217,.1);color:var(--purple-md);">2</div>
+              <div class="flow-text"><strong>Auth Gate</strong> — Sign up / Login (Email or Google)</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(109,40,217,.1);color:var(--purple-md);">3</div>
+              <div class="flow-text"><strong>Dashboard Init</strong> — Firebase fetches coins, streak, rank &amp; quiz
+              </div>
+            </div>
+
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-top:10px;">
+              📚 Study Session Flow</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(5,150,105,.1);color:var(--green);">1</div>
+              <div class="flow-text"><strong>Setup</strong> — Select subject &amp; set a time goal</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(5,150,105,.1);color:var(--green);">2</div>
+              <div class="flow-text"><strong>Focus</strong> — Timer tracks duration automatically</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(5,150,105,.1);color:var(--green);">3</div>
+              <div class="flow-text"><strong>Review + Analytics</strong> — Rate productivity; charts updated</div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;">
+              🎮 Daily Learning Loop</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(217,119,6,.1);color:var(--amber);">1</div>
+              <div class="flow-text"><strong>Check-in</strong> — View "Daily Bonus" card on dashboard</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(217,119,6,.1);color:var(--amber);">2</div>
+              <div class="flow-text"><strong>Puzzle</strong> — Solve today's Memory/Math/Word game</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(217,119,6,.1);color:var(--amber);">3</div>
+              <div class="flow-text"><strong>Atomic Reward</strong> — Firestore Batch: Coins + Streak + Log</div>
+            </div>
+
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--cyan);text-transform:uppercase;letter-spacing:.08em;margin-top:10px;">
+              🤖 AI Study Assistant Flow</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(8,145,178,.1);color:var(--cyan);">1</div>
+              <div class="flow-text"><strong>Upload</strong> — PDF / Image uploaded by student</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(8,145,178,.1);color:var(--cyan);">2</div>
+              <div class="flow-text"><strong>Process</strong> — OCR / PDF text extracted → sent to AI</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="card flow-step">
+              <div class="flow-num" style="background:rgba(8,145,178,.1);color:var(--cyan);">3</div>
+              <div class="flow-text"><strong>Interact</strong> — Student asks questions; AI streams grounded answers
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑩ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 11 · API REFERENCE
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s11">
+      <div class="blob"
+        style="width:380px;height:380px;background:radial-gradient(circle,rgba(5,150,105,.09),transparent 70%);bottom:-100px;left:-80px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip" style="border-color:rgba(5,150,105,.22);background:rgba(5,150,105,.07);color:var(--green);">
+            <div class="chip-dot" style="background:var(--green);"></div>API Reference
+          </div>
+        </div>
+        <h2 class="slide-title">REST API <span class="title-accent">Endpoints</span></h2>
+
+        <div style="display:flex;gap:20px;flex:1;">
+          <div style="flex:2;display:flex;flex-direction:column;gap:9px;">
+            <div class="card api-row">
+              <div class="api-method" style="background:rgba(5,150,105,.12);color:var(--green);">GET</div>
+              <div class="api-path">/api/ai/status</div>
+              <div class="api-desc">Checks availability of Groq / Ollama providers</div>
+            </div>
+            <div class="card api-row">
+              <div class="api-method" style="background:rgba(8,145,178,.12);color:var(--cyan);">GET</div>
+              <div class="api-path">/api/daily-quiz</div>
+              <div class="api-desc">Fetches or generates today's unique cached quiz</div>
+            </div>
+            <div class="card api-row">
+              <div class="api-method" style="background:rgba(109,40,217,.1);color:var(--purple-md);">POST</div>
+              <div class="api-path">/api/generate-quiz</div>
+              <div class="api-desc">Accepts text → structured AI quiz (5 Qs)</div>
+            </div>
+            <div class="card api-row">
+              <div class="api-method" style="background:rgba(109,40,217,.1);color:var(--purple-md);">POST</div>
+              <div class="api-path">/api/ollama</div>
+              <div class="api-desc">Proxies SSE stream to AI engine for chatbot</div>
+            </div>
+            <div class="card api-row">
+              <div class="api-method" style="background:rgba(109,40,217,.1);color:var(--purple-md);">POST</div>
+              <div class="api-path">/api/extract-text</div>
+              <div class="api-desc">File-to-text conversion (PDF/Image/OCR)</div>
+            </div>
+            <div class="card api-row">
+              <div class="api-method" style="background:rgba(217,119,6,.12);color:var(--amber);">POST</div>
+              <div class="api-path">/api/ai/hint</div>
+              <div class="api-desc">Contextual hint without revealing answer</div>
+            </div>
+
+            <div class="card-strong" style="padding:15px 17px;border-radius:14px;margin-top:4px;">
+              <div
+                style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">
+                AI Provider Priority</div>
+              <div style="display:flex;gap:9px;">
+                <div class="card" style="flex:1;padding:11px 14px;">
+                  <div style="font-size:10.5px;font-weight:800;color:var(--amber);margin-bottom:4px;">PRIMARY</div>
+                  <div style="font-size:14px;font-weight:800;color:var(--text);">⚡ Groq</div>
+                  <div style="font-size:12px;color:var(--muted);">Llama 3 / Mixtral</div>
+                </div>
+                <div class="card" style="flex:1;padding:11px 14px;">
+                  <div style="font-size:10.5px;font-weight:800;color:var(--cyan);margin-bottom:4px;">SECONDARY</div>
+                  <div style="font-size:14px;font-weight:800;color:var(--text);">🔮 Gemini Pro</div>
+                  <div style="font-size:12px;color:var(--muted);">Quiz gen &amp; insights</div>
+                </div>
+                <div class="card" style="flex:1;padding:11px 14px;">
+                  <div style="font-size:10.5px;font-weight:800;color:var(--green);margin-bottom:4px;">FALLBACK</div>
+                  <div style="font-size:14px;font-weight:800;color:var(--text);">🦙 Ollama</div>
+                  <div style="font-size:12px;color:var(--muted);">Local / offline</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">
+              Environment Variables</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div class="card"
+                style="padding:10px 14px;font-family:monospace;font-size:12px;color:var(--cyan);font-weight:700;">
+                NEXT_PUBLIC_FIREBASE_CONFIG</div>
+              <div class="card"
+                style="padding:10px 14px;font-family:monospace;font-size:12px;color:var(--green);font-weight:700;">
+                GROQ_API_KEY</div>
+              <div class="card"
+                style="padding:10px 14px;font-family:monospace;font-size:12px;color:var(--amber);font-weight:700;">
+                GOOGLE_GENAI_API_KEY</div>
+              <div class="card"
+                style="padding:10px 14px;font-family:monospace;font-size:12px;color:var(--pink);font-weight:700;">
+                NEXT_PUBLIC_CLOUDINARY_*</div>
+              <div class="card"
+                style="padding:10px 14px;font-family:monospace;font-size:12px;color:var(--purple-md);font-weight:700;">
+                SENDGRID_API_KEY</div>
+            </div>
+            <div class="card feat-card" style="margin-top:4px;border-left:3px solid #000;">
+              <div class="feat-title">▲ Deployment — Vercel</div>
+              <div class="feat-desc">Deployed on <strong style="color:#000;">Vercel</strong> — Next.js build is
+                auto-detected and deployed on every <code
+                  style="font-size:11px;background:rgba(0,0,0,.06);color:#000;padding:2px 5px;border-radius:4px;">git push</code>
+                via Vercel GitHub integration. Zero-config serverless edge functions included.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑪ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 12 · UI/UX DESIGN
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s12">
+      <div class="blob"
+        style="width:460px;height:460px;background:radial-gradient(circle,rgba(219,39,119,.08),transparent 70%);top:-100px;right:-100px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip"
+            style="border-color:rgba(219,39,119,.22);background:rgba(219,39,119,.07);color:var(--pink);">
+            <div class="chip-dot" style="background:var(--pink);"></div>UI / UX Design
+          </div>
+        </div>
+        <h2 class="slide-title">Design System &amp; <span class="title-accent">User Experience</span></h2>
+
+        <div class="grid-2" style="flex:1;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="grad-card">
+              <div class="feat-icon">🪟</div>
+              <div class="feat-title">Glassmorphism Design</div>
+              <div class="feat-desc">Every component uses frosted glass aesthetics — backdrop blur, translucent panels
+                with subtle borders, and layered gradients for a premium feel.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">✨</div>
+              <div class="feat-title">Framer Motion Animations</div>
+              <div class="feat-desc">Physics-based micro-animations on page transitions, card hovers, and modals.
+                Staggered entry animations on landing page hero.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">♿</div>
+              <div class="feat-title">Radix UI Accessibility</div>
+              <div class="feat-desc">Dialogs, Tabs, Selects, Tooltips built on headless Radix primitives — full keyboard
+                navigation, focus management, ARIA compliance.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="card-strong" style="padding:18px;border-radius:16px;">
+              <div
+                style="font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:13px;">
+                Colour Palette</div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#a78bfa);box-shadow:0 2px 10px rgba(109,40,217,.28);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Purple</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0891b2,#22d3ee);box-shadow:0 2px 10px rgba(8,145,178,.28);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Cyan</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#db2777,#f9a8d4);box-shadow:0 2px 10px rgba(219,39,119,.28);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Pink</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#d97706,#fbbf24);box-shadow:0 2px 10px rgba(217,119,6,.28);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Amber</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 2px 10px rgba(5,150,105,.28);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Green</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#ca8a04,#fde047);box-shadow:0 2px 10px rgba(202,138,4,.28);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Yellow</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div
+                    style="width:42px;height:42px;border-radius:12px;background:#f5f4ff;border:2px solid rgba(109,40,217,.15);">
+                  </div>
+                  <div style="font-size:10px;color:var(--muted);font-weight:600;">Light BG</div>
+                </div>
+              </div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">📱</div>
+              <div class="feat-title">Fully Responsive</div>
+              <div class="feat-desc">Tailwind CSS utility classes adapt the layout across desktop, tablet, and mobile
+                viewports seamlessly.</div>
+            </div>
+            <div class="card feat-card">
+              <div class="feat-icon">🖋️</div>
+              <div class="feat-title">Typography &amp; Iconography</div>
+              <div class="feat-desc"><strong style="color:var(--text);">Inter</strong> for UI text, <strong
+                  style="color:var(--text);">Space Grotesk</strong> for headings, <strong
+                  style="color:var(--text);">Lucide React</strong> for all icons — fully consistent.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑫ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 13 · TEAM
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s13">
+      <div class="blob"
+        style="width:500px;height:500px;background:radial-gradient(circle,rgba(109,40,217,.1),transparent 70%);top:-160px;left:-160px;">
+      </div>
+      <div class="blob"
+        style="width:360px;height:360px;background:radial-gradient(circle,rgba(8,145,178,.08),transparent 70%);bottom:-100px;right:-80px;">
+      </div>
+      <div class="content">
+        <div class="slide-header">
+          <div class="chip">
+            <div class="chip-dot" style="background:var(--purple);"></div>Team
+          </div>
+        </div>
+        <h2 class="slide-title">Project Team &amp; <span class="title-accent">Supervisor</span></h2>
+
+        <div style="display:flex;gap:22px;flex:1;align-items:flex-start;">
+          <!-- Supervisor -->
+          <div style="width:280px;display:flex;flex-direction:column;gap:14px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">
+              Project Supervisor</div>
+            <div class="card-strong"
+              style="padding:28px;border-radius:20px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;flex:1;">
+              <div
+                style="width:76px;height:76px;border-radius:22px;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 20px rgba(109,40,217,.28);">
+                👩‍🏫</div>
+              <div>
+                <div style="font-size:20px;font-weight:800;color:var(--text);">Ms. Deepti Gautam</div>
+                <div style="font-size:13.5px;color:var(--muted);margin-top:5px;">Assistant Professor</div>
+                <div style="font-size:13px;color:var(--purple-md);font-weight:700;margin-top:5px;">Department of
+                  Computer Science</div>
+                <div style="font-size:12.5px;color:var(--muted);margin-top:5px;">Govt. Madhav Science P.G. College,
+                  Ujjain</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Members -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+            <div
+              style="font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">
+              Team Members · MCA 6th Semester</div>
+            <div class="card member-card">
+              <div class="avatar" style="background:linear-gradient(135deg,#6d28d9,#a78bfa);">A</div>
+              <div>
+                <div class="member-name">Anubhav Andhiwal</div>
+                <div class="member-roll">Roll No. 07</div>
+                <div class="member-enroll">Enrollment: 2484200032</div>
+              </div>
+            </div>
+            <div class="card member-card">
+              <div class="avatar" style="background:linear-gradient(135deg,#0891b2,#22d3ee);">A</div>
+              <div>
+                <div class="member-name">Anurag Rajput</div>
+                <div class="member-roll">Roll No. 08</div>
+                <div class="member-enroll">Enrollment: 2484200035</div>
+              </div>
+            </div>
+            <div class="card member-card">
+              <div class="avatar" style="background:linear-gradient(135deg,#059669,#34d399);">G</div>
+              <div>
+                <div class="member-name">Gaurav Sharma</div>
+                <div class="member-roll">Roll No. 16</div>
+                <div class="member-enroll">Enrollment: 2484200063</div>
+              </div>
+            </div>
+            <div class="card member-card"
+              style="border-color:rgba(109,40,217,.28);background:rgba(109,40,217,.04);box-shadow:0 4px 18px rgba(109,40,217,.12);">
+              <div class="avatar" style="background:linear-gradient(135deg,#db2777,#f97316);">O</div>
+              <div>
+                <div class="member-name" style="color:var(--purple-md);">Ojasva Tripathi ⭐</div>
+                <div class="member-roll">Roll No. 39</div>
+                <div class="member-enroll">Enrollment: 2484200131</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="corner-num">⑬ / 14</span>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+     SLIDE 14 · THANK YOU
+═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s14">
+      <div class="blob"
+        style="width:600px;height:600px;background:radial-gradient(circle,rgba(109,40,217,.13),transparent 70%);top:-200px;left:-200px;">
+      </div>
+      <div class="blob"
+        style="width:420px;height:420px;background:radial-gradient(circle,rgba(8,145,178,.11),transparent 70%);bottom:-120px;right:-100px;">
+      </div>
+
+      <div class="content" style="justify-content:center;align-items:center;text-align:center;">
+        <div class="chip" style="margin-bottom:22px;">
+          <div class="chip-dot" style="background:var(--purple);"></div>
+          Final Summary
+        </div>
+
+        <h1 class="hero-title" style="font-size:62px;margin-bottom:14px;">StudiFy</h1>
+        <div class="divider" style="margin:0 auto 22px;"></div>
+
+        <p style="font-size:16px;color:var(--muted);max-width:700px;line-height:1.82;margin-bottom:32px;">
+          An AI-Powered, Gamified Learning Ecosystem built on <strong style="color:var(--text);font-weight:800;">Next.js
+            15</strong> + <strong style="color:var(--text);font-weight:800;">Firebase</strong> — leveraging cutting-edge
+          LLMs, real-time databases, and behavioural gamification science to make education engaging, measurable, and
+          rewarding.
+        </p>
+
+        <div style="display:flex;gap:14px;margin-bottom:32px;">
+          <div class="card stat-box" style="min-width:125px;">
+            <div class="stat-num"
+              style="background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+              3 AI</div>
+            <div class="stat-label">Providers</div>
+          </div>
+          <div class="card stat-box" style="min-width:125px;">
+            <div class="stat-num"
+              style="background:linear-gradient(135deg,var(--amber),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+              9+</div>
+            <div class="stat-label">Features</div>
+          </div>
+          <div class="card stat-box" style="min-width:125px;">
+            <div class="stat-num"
+              style="background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+              20+</div>
+            <div class="stat-label">Libraries</div>
+          </div>
+          <div class="card stat-box" style="min-width:125px;">
+            <div class="stat-num"
+              style="background:linear-gradient(135deg,var(--purple-lt),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+              6</div>
+            <div class="stat-label">API Routes</div>
+          </div>
+        </div>
+
+        <div class="card-strong"
+          style="padding:28px 44px;border-radius:22px;max-width:600px;border:2px solid rgba(109,40,217,.18);">
+          <div style="font-size:34px;margin-bottom:12px;">🙏</div>
+          <div
+            style="font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:800;color:var(--text);margin-bottom:10px;">
+            Thank You!</div>
+          <div style="font-size:14.5px;color:var(--muted);line-height:1.75;">We are grateful to <strong
+              style="color:var(--purple-md);font-weight:800;">Asst. Prof. Ms. Deepti Gautam</strong> for her invaluable
+            guidance throughout this project. We welcome any questions and discussion.</div>
+        </div>
+
+        <div style="margin-top:22px;font-size:12px;color:var(--muted-lt);font-weight:500;">
+          Govt. Madhav Science P.G. College, Ujjain &nbsp;·&nbsp; MCA Final Year &nbsp;·&nbsp; 2025–26
+        </div>
+      </div>
+      <span class="corner-num">⑭ / 14</span>
+    </div>
+
+  </div><!-- /#deck -->
+
+
+  <!-- Bottom nav dots & counter -->
+  <div id="nav">
+    <div id="dots"></div>
+    <span id="slide-counter">1 / 14</span>
+    <span class="key-hint">← → keys</span>
+  </div>
+
+
+  <script>
+    const TOTAL = 14;
+    let current = 1;
+
+    function goto(n) {
+      if (n < 1 || n > TOTAL) return;
+      document.getElementById('s' + current).classList.remove('active');
+      current = n;
+      document.getElementById('s' + current).classList.add('active');
+      document.getElementById('slide-counter').textContent = current + ' / ' + TOTAL;
+      document.getElementById('btn-prev').disabled = current === 1;
+      document.getElementById('btn-next').disabled = current === TOTAL;
+      document.getElementById('progress-bar').style.width = ((current / TOTAL) * 100) + '%';
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i + 1 === current));
+    }
+
+    // Build dots
+    const dotsEl = document.getElementById('dots');
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 1 ? ' on' : '');
+      d.onclick = () => goto(i);
+      d.title = 'Slide ' + i;
+      dotsEl.appendChild(d);
+    }
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); goto(current + 1); }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goto(current - 1); }
+      if (e.key === 'Home') goto(1);
+      if (e.key === 'End') goto(TOTAL);
+    });
+
+    // Responsive scale (fits into any screen)
+    function scaleSlide() {
+      const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+      document.getElementById('deck').style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
+    }
+    window.addEventListener('resize', scaleSlide);
+    scaleSlide();
+
+    // Init
+    document.getElementById('progress-bar').style.width = ((1 / TOTAL) * 100) + '%';
+  </script>
+
+</body>
+
+</html>

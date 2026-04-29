@@ -3,6 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Toaster } from '@/components/ui/toaster';
+import MaintenanceGuard from '@/components/MaintenanceGuard';
 
 export const viewport = {
   width: 'device-width',
@@ -66,7 +67,9 @@ export default function RootLayout({
       <body className="antialiased">
         <AuthProvider>
           <ThemeProvider>
-            {children}
+            <MaintenanceGuard>
+              {children}
+            </MaintenanceGuard>
             <Toaster />
           </ThemeProvider>
         </AuthProvider>

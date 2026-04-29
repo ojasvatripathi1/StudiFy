@@ -1,0 +1,95 @@
+version: "2"
+type: frontend
+tech_stack:
+  - Next.js 15
+  - React 18
+  - Tailwind CSS
+  - Firebase
+  - Radix UI
+  - Framer Motion
+routes:
+  - path: /
+    file: src/app/page.tsx
+    auth_required: false
+    description: Landing page
+  - path: /login
+    file: src/app/login/page.tsx
+    auth_required: false
+    description: User login page
+  - path: /signup
+    file: src/app/signup/page.tsx
+    auth_required: false
+    description: User signup page
+  - path: /verify-email
+    file: src/app/verify-email/page.tsx
+    auth_required: false
+    description: Email verification page
+  - path: /profile
+    file: src/app/profile/page.tsx
+    auth_required: true
+    description: User dashboard and study insights
+  - path: /setup-shop
+    file: src/app/setup-shop/page.tsx
+    auth_required: true
+    description: Coin shop and customization
+  - path: /study-assistant
+    file: src/app/study-assistant/page.tsx
+    auth_required: true
+    description: AI chatbot study assistant
+features:
+  - name: User Authentication
+    description: Sign up, verify email, and login with email and password
+    files:
+      - src/app/login/page.tsx
+      - src/app/signup/page.tsx
+      - src/app/verify-email/page.tsx
+    entry_route: /login
+    user_interactions:
+      - Fill email input field
+      - Fill password input field
+      - Click Login or Signup button
+      - See error message on invalid credentials
+    api_calls:
+      - method: POST
+        endpoint: Firebase Auth
+    auth_required: false
+  - name: User Dashboard
+    description: View study progress, coin balance, and active streaks
+    files:
+      - src/app/profile/page.tsx
+    entry_route: /profile
+    user_interactions:
+      - View charts
+      - Check coins balance
+      - See recent quizzes
+    api_calls:
+      - method: GET
+        endpoint: Firestore Profile Query
+    auth_required: true
+  - name: AI Study Assistant
+    description: Interactive tutor chatbot for studying
+    files:
+      - src/app/study-assistant/page.tsx
+    entry_route: /study-assistant
+    user_interactions:
+      - Type question in chat box
+      - Click send message
+      - Receive AI response
+    api_calls:
+      - method: POST
+        endpoint: /api/study-chat
+    auth_required: true
+  - name: Coin Shop
+    description: Spend coins on virtual items
+    files:
+      - src/app/setup-shop/page.tsx
+    entry_route: /setup-shop
+    user_interactions:
+      - Browse shop items
+      - Click buy on an item
+      - View updated balance
+    api_calls:
+      - method: POST
+        endpoint: Firestore Purchase Transaction
+    auth_required: true
+known_limitations: []

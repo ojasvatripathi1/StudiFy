@@ -1,0 +1,20 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "studify-testing1",
+  "loginPassword": "Ansh123",
+  "executionArgs": {
+    "projectName": "StudiFy",
+    "projectPath": "c:\\Users\\ojasv\\Desktop\\StudiFy",
+    "testIds": [],
+    "additionalInstruction": "",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-I31aVTun87XXDMWY5pK3LKxuO2nYxxzVduEl7l8vovkPj3pAGcZP2d9qfzW-d-ohNGaorWlWQDV2i0SZAVQBOzGRcYonAGkPd3kwmR6tGFfQ16h_aPuYQRyL0NBJ3XDx_XY"
+    }
+  },
+  "serverPort": 64020,
+  "proxy": "http://4d8b65c4-534d-4401-90c4-de272b3abe88:UWCm7kYAnkNuzGaV8giTy4i54qGrGieo@tun.testsprite.com:8080"
+}

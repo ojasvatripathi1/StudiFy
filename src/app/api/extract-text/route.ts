@@ -1,11 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, unlink, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { existsSync } from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
+
+/**
+ * Sanitize a filename to prevent path traversal and command injection.
+ * Only allows alphanumeric, hyphens, underscores, dots, and spaces.
+ */
+function sanitizeFileName(name: string): string {
+  return basename(name).replace(/[^a-zA-Z0-9._\- ]/g, '_');
+}
+
+/**
+ * Safely escape a file path for embedding in a Python script.
+ * Uses JSON.stringify to properly escape all special characters.
+ */
+function escapePythonString(value: string): string {
+  return JSON.stringify(value);
+}
 
 /**
  * API Route to extract text from uploaded files
@@ -21,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const fileName = file.name;
+    const fileName = sanitizeFileName(file.name);
     let extractedText = '';
 
     // Convert file to buffer
@@ -116,7 +132,7 @@ import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 try:
-    with pdfplumber.open(r"${filePath}") as pdf:
+    with pdfplumber.open(${escapePythonString(filePath)}) as pdf:
         text = ""
         for page in pdf.pages:
             text += (page.extract_text() or "") + "\\n"
@@ -175,7 +191,7 @@ import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 try:
-    prs = Presentation(r"${filePath}")
+    prs = Presentation(${escapePythonString(filePath)})
     text = ""
     for slide_num, slide in enumerate(prs.slides, 1):
         text += f"--- Slide {slide_num} ---\\n"
@@ -230,7 +246,7 @@ import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 try:
-    doc = Document(r"${filePath}")
+    doc = Document(${escapePythonString(filePath)})
     text = ""
     for para in doc.paragraphs:
         text += para.text + "\\n"

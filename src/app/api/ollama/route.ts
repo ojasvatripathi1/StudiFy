@@ -11,14 +11,6 @@ const useGroq = isGroqConfigured();
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log('API Request:', { 
-            hasMessage: !!body.message, 
-            hasHistory: !!body.history, 
-            hasMaterial: !!body.studyMaterial,
-            hasImage: !!body.imageData,
-            hasUserData: !!body.userData,
-            useGroq 
-        });
 
         if (body.stream) {
             if (useGroq) {
