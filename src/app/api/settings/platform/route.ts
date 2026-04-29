@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export async function GET() {
   try {
-    const db = getAdminDb();
-    const snap = await db.collection("settings").doc("platform").get();
+    const docRef = doc(db, "settings", "platform");
+    const snap = await getDoc(docRef);
 
-    if (!snap.exists) {
+    if (!snap.exists()) {
       return NextResponse.json({ maintenanceMode: false });
     }
 
     return NextResponse.json(snap.data());
   } catch (error) {
     console.error("Error fetching platform settings:", error);
-    // On error, default to false so we don't break the app
+    // On error (like missing permissions), default to false so we don't break the app
     return NextResponse.json({ maintenanceMode: false }, { status: 500 });
   }
 }
